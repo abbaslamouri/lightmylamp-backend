@@ -6,7 +6,7 @@ docker exec -it node-ambassador-backend-1 /bin/sh
 
 
 
-
+docker-compose down --rmi all
 
 
 
