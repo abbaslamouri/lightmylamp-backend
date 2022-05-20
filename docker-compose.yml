@@ -12,8 +12,8 @@ services:
       - app-network
     env_file:
       - ./.env
-    ports:
-      - 80:$PORT
+    # ports:
+    #   - 80:$PORT
     # environment:
     #   - NODE_ENV=development
     # command: yarn dev
