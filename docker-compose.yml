@@ -8,8 +8,8 @@ services:
     #   - ./:/usr/src/app
     #   - /usr/scr/app/node_modules
     restart: always
-    networks:
-      - backend-network
+    # networks:
+    #   - backend-network
     env_file:
       - ./.env
     # ports:
@@ -26,8 +26,8 @@ services:
     ports:
       - 80:80
       - 443:443
-    networks:
-      - backend-network
+    # networks:
+    #   - backend-network
     volumes:
       - web-root:/var/www/html
       - ./nginx:/etc/nginx/conf.d
@@ -71,6 +71,7 @@ volumes:
       type: none
       device: /home/abbas/apps/lightmylamp/
       o: bind
-networks:
-  backend-network:
+
+# networks:
+#   backend-network:
     # driver: bridge
