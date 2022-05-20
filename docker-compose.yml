@@ -65,7 +65,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/sammy/node_project/views/
+      device: /home/abbas/apps/lightmylamp/
       o: bind
 
 networks:
