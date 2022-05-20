@@ -1,0 +1,192 @@
+
+docker-compose -f docker-compose.dev.yml up -d --build
+docker exec -it lightmylamp-backend-1 /bin/sh
+docker exec -it node-ambassador-backend-1 /bin/sh
+
+
+
+
+
+
+
+
+docker build -t api .
+
+
+
+
+
+docker run -v /Users/abbaslamouri/Desktop/Sandbox/node/api-ts:/app -p 5000:5000 --name apic api
+docker run -v $(pwd):/app -v /app/node_modules --env-file ./.env -p 5000:5000 --name apic api
+
+#ro may not work
+
+docker container prune -f
+docker container prune -fv
+
+docker image prune -a
+
+docker inspect 909ddcd43f5d
+
+docker exec -it lightmylamp-api-api-1 /bin/sh
+docker exec -it lightmylamp-api-redis-1 /bin/sh
+
+lightmylamp-api-redis-1
+
+  REDIS_IP: process.env.REDIS_IP || 'redis',
+
+
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --scale api=3 --no-deps api
+
+docker logs container-id -f 
+
+
+
+
+docker-compose down 
+
+mongo -u "lightmylamp-db-user" -p "Wjshg^&JXslsp"
+
+printenv
+
+
+
+docker image tag lightmylamp-api_api abbaslamouri/lightmylamp-api
+
+// Build api service image to push to docker hub
+docker compose -f docker-compose.yml -f docker-compose.prod.yml build api
+
+// Push service to docker hub
+docker compose -f docker-compose.yml -f docker-compose.prod.yml push api
+
+// Pull service to docker hub
+docker compose -f docker-compose.yml -f docker-compose.prod.yml pull api
+
+// update api container
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --scale api=3 --no-deps api
+
+// Watchtower
+docker run -d -e WATCHTOWER_TRACE=true -e WATCHTOWER_DEBUG=true -e WATCHTOWER_POLL_INTERVAL=20 --name watchtower -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower <container> 
+
+// Docker settings
+docker info
+
+
+
+// Initialize docker swarm
+docker swarm init
+
+ip add
+
+docker swarm init --advertise-addr 159.223.108.41
+
+docker swarm init --advertise-addr 172.30.0.1
+
+
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-4grcp95eo9yzfhkyedafpm70ebppmoniba9oxlpenswwfn3lye-avogp3tozr5mhak6r4fs82ruh 159.223.108.41:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml lightmylamp
+
+docker stack services lightmylamp
+
+docker swarm leave -f
+
+
+
+kubectl get nodes
+
+kubectl het pods
+
+kubectl get svc
+
+kubectl create deployment api --image=abbaslamouri/lightmylamp-api
+
+kubectl logs deploy/api
+
+kubectl expose deploy/api --type=NodePort  --port=80
+
+kubectl logs deploy/api --follow
+
+kubectl scale deployment api --replicas=3
+
+kubectl get pods -w
+
+kubectl create deployment www --image=nginx -o yaml > nginx.yaml
+
+kubectl delete pod api
+
+kubectl exec api -it /bin/sh
+
+kubectl describe pod api
+
+kubectl rollout restart deployment api-depl
+
+
+////////////////////////////////////////////////
+
+1. Create a DO kubernetes
+
+2. Authenticate to the kubernetes clusetr
+
+3. Deploy application
+  kubectl create ns backend
+  kubectl apply -f api.yaml
+  kubectl -n backend get all
+
+4. Install ingress-nginx controller
+  get chart from artifact hub
+  kubectl create namsepace ingress-nginx
+  helm install ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f nginx-values.yaml
+
+5. Configure DNS
+  change domain  nameservers at registrar
+  Add domain under networking
+  add 2 A records to domain
+
+6. Configure ingress rules to point domains
+  comment the tls portion of this file for now
+  kubectl apply -f ingress-nginx.yaml
+
+7. configure tls
+  Fetch the cert-manger chart from artifacthub
+  Before installing the chart, you must first install the cert-manager CustomResourceDefinition resources. This is performed in a separate step to allow you to easily uninstall and reinstall cert-manager without deleting your installed custom resources (see ArtifactHUB fordetails)
+
+  kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.8.0/cert-manager.crds.yaml
+
+  helm install cert-manager -n cert-manager --version v1.8.0 jetstack/cert-manager -f cert-manager-values.yaml
+
+8.  Deply cert-manager with letsencrypt
+  kubectl apply -f cert-issuer.yaml
+  uncomment tls portion of ingress-nginx.yaml
+  kubectl apply -f ingress-nginx.yaml
+
+9.  Enable proxy protocol
+    update nginx-values.yaml
+    helm upgrade ingress-nginx ingress-nginx/ingress-nginx -n ingress-nginx -f nginx-values.yaml
+
+10.Connect database
+   create db yaml
+   update source code 
+
+   kubectl rollout restart deployment -n backend api-depl
+
+
+
+
+   env:
+            - name: DB_URI
+              value: 'mongodb://db-svc:27017/lightmylamp-api'
+
+
+
+
+
+
+
