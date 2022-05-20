@@ -8,8 +8,8 @@ services:
     #   - ./:/usr/src/app
     #   - /usr/scr/app/node_modules
     restart: always
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
     env_file:
       - ./.env
     # ports:
@@ -32,8 +32,8 @@ services:
       - certbot-var:/var/lib/letsencrypt
     depends_on:
       - backend
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
     # environment:
     #  - NGINX_HOST=foobar.com
     #  - NGINX_PORT=80
@@ -56,6 +56,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: $MONGO_DB_PASSWORD
     volumes:
       - mongo-db:/data/db
+    # networks:
+    #   - app-network
 
 volumes:
   mongo-db: {}
@@ -67,7 +69,6 @@ volumes:
       type: none
       device: /home/abbas/apps/lightmylamp/
       o: bind
-
-networks:
-  app-network:
-    driver: bridge
+# networks:
+#   app-network:
+#     driver: bridge
