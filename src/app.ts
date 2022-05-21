@@ -2,6 +2,7 @@ import os from 'os'
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import dotenv from 'dotenv'
 // import AppError from './utils/AppError'
 // import { createClient } from 'redis'
 // import connectRedis from 'connect-redis'
@@ -12,6 +13,7 @@ import errorHandler from './utils/errorHandler'
 import authRouter from './routes/v1/auth'
 import userRouter from './routes/v1/users'
 import { IUser } from './models/user'
+dotenv.config()
 
 declare module 'express' {
   interface Request {
