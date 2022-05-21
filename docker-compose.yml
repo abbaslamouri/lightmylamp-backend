@@ -34,7 +34,7 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      # - dhparam:/etc/ssl/certs
+      - dhparam:/etc/ssl/certs
     depends_on:
       - backend
 
@@ -71,7 +71,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/abbas/apps/lightmylamp/lightmylamp-backend/
+      device: /home/abbas/apps/lightmylamp/lightmylamp-backend/dhparam/
       o: bind
 # networks:
 #   backend-network:
