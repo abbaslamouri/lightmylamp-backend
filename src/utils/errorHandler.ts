@@ -35,7 +35,7 @@ const sendError = (res: Response, returnError: ReturnError) => {
 }
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  console.log(colors.red.bold(`ERROR', ${err}`))
+  console.log(colors.red.bold(`ERROR, ${err}`))
 
   const returnError: ReturnError = {
     status: 'error',
@@ -88,6 +88,7 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
     //   error = new AppError(`Your token has expired. please login`, 401, 'tokenExpiredError')
     // } else error = err
   }
+
   sendError(res, returnError)
 }
 
