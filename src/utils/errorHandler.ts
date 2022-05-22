@@ -17,10 +17,9 @@ interface ReturnError {
 }
 
 const sendError = (res: Response, returnError: ReturnError) => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     res.status(returnError.statusCode).json(returnError)
-  }
-  if (process.env.NODE_ENV === 'production') {
+  } else {
     if (!returnError.errors.length)
       returnError.errors.push({
         path: '',
