@@ -14,10 +14,11 @@ const dbConnect = async () => {
   try {
     // if (!process.env.JWT_SECRET) throw new Error('Environment variable JWT_SECRET is not defined')
     // if (!process.env.DB_URI) throw new Error('Environment variable DB_URI is not defined')
+    const port = process.env.PORT || '5000'
     await mongoose.connect(process.env.DB_URI as string)
     console.log(colors.magenta.bold(`Database connection succesfull`))
-    app.listen(process.env.PORT, () => {
-      console.log(colors.cyan.bold(`server running on port ${process.env.PORT || 8080}...`))
+    app.listen(port, () => {
+      console.log(colors.cyan.bold(`server running on port ${port}...`))
     })
   } catch (err) {
     console.log(colors.red.bold(`Mongo DB Error ${err}`))
