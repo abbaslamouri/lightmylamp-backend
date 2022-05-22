@@ -40,12 +40,12 @@ const sendTokenResponse = async (res: Response, statusCode: number, user: IUser)
   //   path: '/',
   // })
 
-  // res.cookie('jwt', token, {
-  //   maxAge: Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000,
-  //   httpOnly: true,
-  //   secure: process.env.NODE_ENV === 'production' ? true : false,
-  //   // path: '/',
-  // })
+  res.cookie('jwt', token, {
+    maxAge: Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production' ? true : false,
+    // path: '/',
+  })
   user.password = undefined
   res.status(statusCode).json({
     status: 'success',
@@ -114,7 +114,7 @@ const signin = asyncHandler(async (req: Request, res: Response, next: NextFuncti
   if (!email || !password) return next(new AppError('Email and Password are required', 401))
   const user = await User.findOne({ email }).select('+password')
   if (!user) return next(new AppError('Invalid email or password', 401))
-  const passwordCheck = await user.checkPassword(password, user.password as string)
+  const passwordCheck = await user.checkPassword(password, String(user.password))
   if (!passwordCheck) return next(new AppError('Invalid email or password', 401))
   sendTokenResponse(res, 200, user)
 })
