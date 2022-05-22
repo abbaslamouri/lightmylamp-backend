@@ -114,7 +114,7 @@ const signin = asyncHandler(async (req: Request, res: Response, next: NextFuncti
   if (!email || !password) return next(new AppError('Email and Password are required', 401))
   const user = await User.findOne({ email }).select('+password')
   if (!user) return next(new AppError('Invalid email or password', 401))
-  const passwordCheck = await user.checkPassword(password, String(user.password))
+  const passwordCheck = await user.checkPassword(password, user.password as string)
   if (!passwordCheck) return next(new AppError('Invalid email or password', 401))
   sendTokenResponse(res, 200, user)
 })
