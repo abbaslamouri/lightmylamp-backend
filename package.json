@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
     "build": "rimraf dist/ && tsc",
-    "start": "yarn build && node dist/server.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
