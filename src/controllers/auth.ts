@@ -40,12 +40,12 @@ const sendTokenResponse = async (res: Response, statusCode: number, user: IUser)
   //   path: '/',
   // })
 
-  res.cookie('jwt', token, {
-    maxAge: Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production' ? true : false,
-    // path: '/',
-  })
+  // res.cookie('jwt', token, {
+  //   maxAge: Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000,
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === 'production' ? true : false,
+  //   // path: '/',
+  // })
   user.password = undefined
   res.status(statusCode).json({
     status: 'success',
