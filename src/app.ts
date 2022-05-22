@@ -55,7 +55,7 @@ app.get('/api/v1/ping', async (req, res) => {
   console.log(`Sending response from container ${os.hostname()}`)
   res.status(200).json({
     status: `success`,
-    // port:  config.PORT,
+    environment: process.env.NODE_ENV,
     message: 'pong!!!!!',
     response: `Sending response from container ${os.hostname()}`,
   })
