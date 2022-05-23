@@ -61,8 +61,8 @@ app.get('/api/v1/ping', async (req, res) => {
   })
 })
 // app.use('/api/v1/categories', categoryRouter)
-app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/users', userRouter)
+app.use('/v1/auth', authRouter)
+app.use('/v1/users', userRouter)
 // app.all('*', async (req: Request, res: Response, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 // })
