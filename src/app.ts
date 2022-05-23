@@ -51,7 +51,7 @@ app.use(express.json({ limit: '1000kb' }))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.get('/api/v1/ping', async (req, res) => {
+app.get('/v1/ping', async (req, res) => {
   console.log(`Sending response from container ${os.hostname()}`)
   res.status(200).json({
     status: `success`,
