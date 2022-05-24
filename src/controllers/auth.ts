@@ -134,6 +134,7 @@ const signout = asyncHandler(async (req: Request, res: Response, next: NextFunct
 })
 
 const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  console.log('RC', req.cookies)
   let token = ''
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1]
