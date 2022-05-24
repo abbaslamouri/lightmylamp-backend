@@ -81,12 +81,14 @@ const signup = asyncHandler(async (req: Request, res: Response, next: NextFuncti
   //   url: `${completeSingupUrl}/?token=${resetToken}`,
   // }).sendCompleteSignup()
 
-  res.status(200).json({
-    status: 'success',
-    user,
-    // message: 'Email sent',
-    // token: resetToken,
-  })
+  sendTokenResponse(res, 200, user)
+
+  // res.status(200).json({
+  //   status: 'success',
+  //   user,
+  //   // message: 'Email sent',
+  //   // token: resetToken,
+  // })
 })
 
 const completeSignup = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
