@@ -112,6 +112,7 @@ const completeSignup = asyncHandler(async (req: Request, res: Response, next: Ne
 })
 
 const signin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.body)
   const { email, password } = req.body
   if (!email || !password) return next(new AppError('Email and Password are required', 401))
   const user = await User.findOne({ email }).select('+password')
