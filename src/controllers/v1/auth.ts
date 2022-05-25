@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
-import { IUser, User } from '../models/user'
+import { IUser, User } from '../../models/user'
 
 import jwt from 'jsonwebtoken'
 import Stripe from 'stripe'
 // import sgMail from'@sendgrid/mail'
 import crypto from 'crypto'
 import { promisify } from 'util'
-import AppError from '../utils/AppError'
-import asyncHandler from '../utils/asyncHandler'
+import AppError from '../../utils/AppError'
+import asyncHandler from '../../utils/asyncHandler'
 // import sendEmail from'../utils/Email'
 
 // declare module 'express' {

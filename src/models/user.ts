@@ -48,7 +48,7 @@ interface IUser {
   parent: Types.ObjectId
   gallery: Types.ObjectId
   avatar: Types.ObjectId
-  role: string
+  role: Types.ObjectId
   password: unknown
   // passwordConfirm: string
   active: boolean
@@ -152,9 +152,11 @@ const schema = new Schema<IUser>(
       ref: 'Media',
     },
     role: {
-      type: String,
-      enum: ['admin', 'shop-manager', 'customer', 'user', 'guide', 'lead-guide'],
-      default: 'user',
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+      // type: String,
+      // enum: ['admin', 'shop-manager', 'customer', 'user', 'guide', 'lead-guide'],
+      // default: 'user',
     },
     password: {
       type: String,
@@ -205,7 +207,8 @@ schema.pre('save', async function (next) {
 })
 
 schema.methods.getSinedJwtToken = async function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET!, { expiresIn: process.env.JWT_EXPIRES_IN })
+  if (process.env.JWT_SECRET)
+    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN })
 }
 
 schema.methods.checkPassword = async function (password: string, hash: string) {

@@ -8,7 +8,7 @@ import {
   updateCurrentPassword,
   protect,
   signout,
-} from '../../controllers/auth'
+} from '../../controllers/v1/auth'
 
 const router = Router()
 

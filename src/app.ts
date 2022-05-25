@@ -12,6 +12,7 @@ import errorHandler from './utils/errorHandler'
 // import categoryRouter from './routes/v1/categories'
 import authRouter from './routes/v1/auth'
 import userRouter from './routes/v1/users'
+import permissionRouter from './routes/v1/permissions'
 import { IUser } from './models/user'
 dotenv.config()
 
@@ -35,7 +36,12 @@ declare module 'express' {
 
 const app = express()
 app.set('trust proxy', true)
-app.use(cors({}))
+app.use(
+  cors({
+    // credentials: true,
+    // origin: ['http://localhost:3000'],
+  })
+)
 
 // app.use(
 //   session({
@@ -63,6 +69,7 @@ app.get('/v1/ping', async (req, res) => {
 // app.use('/api/v1/categories', categoryRouter)
 app.use('/v1/auth', authRouter)
 app.use('/v1/users', userRouter)
+app.use('/v1/permissions', permissionRouter)
 // app.all('*', async (req: Request, res: Response, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 // })

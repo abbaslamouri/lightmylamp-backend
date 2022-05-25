@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Category } from '../../models/category'
-import { fetchAll, createDoc } from '../../controllers/factory'
+import { fetchAll, createDoc } from '../../controllers/v1/factory'
 
 const router = Router()
 

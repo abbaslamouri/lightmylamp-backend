@@ -1,12 +1,12 @@
 // const multer = require('multer')
 // import APIFeatures from '../utils/APIFeatures'
 import { Request, Response, NextFunction } from 'express'
-import { User, IUser } from '../models/user'
-import AppError from '../utils/AppError'
-import asyncHandler from '../utils/asyncHandler'
+import { Permission } from '../../models/permission'
+import AppError from '../../utils/AppError'
+import asyncHandler from '../../utils/asyncHandler'
 
 const fetchAll = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const docs = await User.find()
+  const docs = await Permission.find()
   res.status(200).json({
     status: 'success',
     docs,
@@ -15,7 +15,7 @@ const fetchAll = asyncHandler(async (req: Request, res: Response, next: NextFunc
 
 const createDoc = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   console.log('CRREATING', req.body)
-  const doc = await User.create(req.body)
+  const doc = await Permission.create(req.body)
   if (!doc) return next(new AppError(`We can't create document ${req.body.name}`, 404))
   res.status(201).json({
     status: 'success',
@@ -23,17 +23,26 @@ const createDoc = asyncHandler(async (req: Request, res: Response, next: NextFun
   })
 })
 
-const fetchCurrentUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  // console.log('REqPARAMS', req.cookies)
-  // console.log('REqUser', req.user)
-  if (!req.user || !req.user._id) return next(new AppError(`We can't find a user with the supplied credentials}`, 404))
-  const user = await User.findById(req.user.id)
-  if (!user) return next(new AppError(`We can't find a user with id = ${req.params.id}`, 404))
-  res.status(200).json({
-    status: 'succes',
-    user,
+const deleteDoc = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const doc = await Permission.findByIdAndDelete(req.params.id)
+  if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
+  res.status(204).json({
+    status: 'success',
+    doc,
   })
 })
+
+// const fetchCurrentUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//   // console.log('REqPARAMS', req.cookies)
+//   // console.log('REqUser', req.user)
+//   if (!req.user || !req.user._id) return next(new AppError(`We can't find a user with the supplied credentials}`, 404))
+//   const user = await User.findById(req.user.id)
+//   if (!user) return next(new AppError(`We can't find a user with id = ${req.params.id}`, 404))
+//   res.status(200).json({
+//     status: 'succes',
+//     user,
+//   })
+// })
 
 // import factory from '../controllers/factory'
 
@@ -60,21 +69,21 @@ const fetchCurrentUser = asyncHandler(async (req: Request, res: Response, next: 
 
 // exports.uploadUserPhoto = upload.single('photo')
 
-const filteredObj = (obj: any, allowedFields: string[]) => {
-  const newObj: any = {}
-  Object.keys(obj).forEach((prop) => {
-    if (allowedFields.includes(prop)) newObj[prop] = obj[prop]
-  })
+// const filteredObj = (obj: any, allowedFields: string[]) => {
+//   const newObj: any = {}
+//   Object.keys(obj).forEach((prop) => {
+//     if (allowedFields.includes(prop)) newObj[prop] = obj[prop]
+//   })
 
-  return newObj
-}
+//   return newObj
+// }
 
-const SendResponse = async (user: IUser, statusCode: number, res: Response) => {
-  res.status(statusCode).json({
-    status: 'success',
-    data: user,
-  })
-}
+// const SendResponse = async (user: IUser, statusCode: number, res: Response) => {
+//   res.status(statusCode).json({
+//     status: 'success',
+//     data: user,
+//   })
+// }
 
 // const fetchLoggedIn = asyncHandler(async (req, res, next) => {
 //   req.params.id = req.user.id
@@ -100,34 +109,34 @@ const SendResponse = async (user: IUser, statusCode: number, res: Response) => {
 //   //   createSendData(user, 200, res)
 // })
 
-const updateCurrentUserInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  if (req.body.password) return next(new AppError('You cannot use this route for passsword updates', 400))
-  const filteredBody = filteredObj(req.body, ['name', 'email', 'shippingAddresses'])
-  console.log('RU', req.user)
-  console.log('RB', req.body)
-  console.log('FB', filteredBody)
-  if (!req.user || !req.user._id) return next(new AppError('We cannot find a user with this id', 400))
-  const user = await User.findByIdAndUpdate(req.user._id, filteredBody, {
-    new: true,
-    runValidators: true,
-  })
-  if (!user) return next(new AppError('You must be logged in to change your data', 401))
-  SendResponse(user, 200, res)
-})
+// const updateCurrentUserInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//   if (req.body.password) return next(new AppError('You cannot use this route for passsword updates', 400))
+//   const filteredBody = filteredObj(req.body, ['name', 'email', 'shippingAddresses'])
+//   console.log('RU', req.user)
+//   console.log('RB', req.body)
+//   console.log('FB', filteredBody)
+//   if (!req.user || !req.user._id) return next(new AppError('We cannot find a user with this id', 400))
+//   const user = await User.findByIdAndUpdate(req.user._id, filteredBody, {
+//     new: true,
+//     runValidators: true,
+//   })
+//   if (!user) return next(new AppError('You must be logged in to change your data', 401))
+//   SendResponse(user, 200, res)
+// })
 
-const deleteLoggedIn = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  // await Model.findByIdAndUpdate(req.user.id, { active: false })
-  // SendResponse(null, 200, res)
-})
+// const deleteLoggedIn = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//   // await Model.findByIdAndUpdate(req.user.id, { active: false })
+//   // SendResponse(null, 200, res)
+// })
 
-const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined.  Please use /signup instead',
-  })
-})
+// const createUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//   res.status(500).json({
+//     status: 'error',
+//     message: 'This route is not defined.  Please use /signup instead',
+//   })
+// })
 
-export { fetchAll, fetchCurrentUser, updateCurrentUserInfo, createDoc }
+export { fetchAll, createDoc, deleteDoc }
 // exports.getAllUsers = factory.getAll(User)
 // exports.getUser = factory.getOne(User)
 // exports.updateUser = factory.updateOne(User)
