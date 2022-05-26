@@ -44,13 +44,15 @@ const schema = new Schema<ICategory>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 )
 
 // Document Middleware, runs only before save() and create()
 schema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true })
-  this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
+  // this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
   next()
 })
 

@@ -56,7 +56,7 @@ const sendTokenResponse = async (res: Response, statusCode: number, user: IUser)
 
 const signup = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   // return next(new AppError(`We can't create user`, 404))
-  console.log('RB', req.body)
+  // console.log('RB', req.body)
   // const { user, completeSingupUrl, emailSubject } = req.body
   const { name, email, password } = req.body
   // const { user } = req.body
@@ -93,7 +93,7 @@ const signup = asyncHandler(async (req: Request, res: Response, next: NextFuncti
 })
 
 const completeSignup = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('RPT', req.params.token)
+  // console.log('RPT', req.params.token)
   const hashedToken = await crypto.createHash('sha256').update(req.params.token).digest('hex')
   const user = await User.findOne({
     passwordResetToken: hashedToken,
@@ -105,7 +105,7 @@ const completeSignup = asyncHandler(async (req: Request, res: Response, next: Ne
   user.passwordResetToken = undefined
   user.passwordResetExpires = undefined
   user.active = true
-  console.log(user)
+  // console.log(user)
   await user.save()
   const url = `${process.env.BASE_URL}`
   // await new Email(user, url).sendWelcome()
@@ -113,7 +113,7 @@ const completeSignup = asyncHandler(async (req: Request, res: Response, next: Ne
 })
 
 const signin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.body)
+  // console.log(req.body)
   const { email, password } = req.body
   if (!email || !password) return next(new AppError('Email and Password are required', 401))
   const user = await User.findOne({ email }).select('+password')
@@ -155,11 +155,11 @@ const protect = asyncHandler(async (req: Request, res: Response, next: NextFunct
 
 const authorize = (roles: string[]) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('USER', req.user)
+    // console.log('USER', req.user)
     let forbidden = true
     if (req.user && req.user.role) {
       const role = Role.findById(req.user.role)
-      console.log(role)
+      // console.log(role)
       //   for (const prop in roles){
       //     if (req.user.role.permissions.includes(roles[prop])
       //     forbidden = false
@@ -203,7 +203,7 @@ const forgotPassword = asyncHandler(async (req: Request, res: Response, next: Ne
 })
 
 const resetPassword = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('RP', req.params)
+  // console.log('RP', req.params)
   const hashedToken = await crypto.createHash('sha256').update(req.params.token).digest('hex')
   const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpires: { $gt: Date.now() } })
   if (!user) return next(new AppError('Token is invlaid or has expired', 400))
@@ -215,7 +215,7 @@ const resetPassword = asyncHandler(async (req: Request, res: Response, next: Nex
 })
 
 const updateCurrentPassword = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.user)
+  // console.log(req.user)
   if (!req.user || !req.user._id) return next(new AppError(`We can't find a user with the supplied credentials}`, 404))
   const user = await User.findById(req.user._id).select('+password')
   if (!user) return next(new AppError('You must be logged in to change your password', 401))

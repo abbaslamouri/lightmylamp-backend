@@ -6,7 +6,6 @@ import { Product } from '../../models/product'
 import { Media } from '../../models/media'
 
 const setProductAuthor = (req: Request, res: Response, next: NextFunction) => {
-
   if (req.user) {
     req.body.createdBy = req.user._id
   }
@@ -38,12 +37,12 @@ const createProduct = asyncHandler(async (req: Request, res: Response, next: Nex
   // const media = await Media.create(uploadFiles)
   // if (!media) req.body.gallery = []
   // else req.body.gallery = media
-  const product = await Product.create(req.body)
-  if (!product) return next(new AppError(`We can't create product ${req.body.name}`, 404))
-  res.status(201).json({
-    status: 'success',
-    product,
-  })
+  // const product = await Product.create(req.body)
+  // if (!product) return next(new AppError(`We can't create product ${req.body.name}`, 404))
+  // res.status(201).json({
+  //   status: 'success',
+  //   product,
+  // })
 })
 
 export { setProductAuthor, createProduct }

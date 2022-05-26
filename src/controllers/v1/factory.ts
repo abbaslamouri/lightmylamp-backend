@@ -14,7 +14,6 @@ import asyncHandler from '../../utils/asyncHandler'
 
 const fetchAll = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('KKKLLLLLLLL')
     const docs = await Model.find()
     res.status(200).json({
       status: 'success',
@@ -23,9 +22,22 @@ const fetchAll = (Model: any) =>
     })
   })
 
+// const fetchAll = (Model: any) =>
+//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//     const totalCount = await Model.countDocuments()
+//     const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
+//     const docs = await features.query
+//     // const docs = await features.query.explain()
+//     res.status(200).json({
+//       status: 'succes',
+//       totalCount,
+//       docs,
+//     })
+//   })
+
 const fetchDoc = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('REqPARAMS', req.params)
+    // console.log('REqPARAMS', req.params)
     const doc = await Model.findById(req.params.id)
     if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
     res.status(200).json({
