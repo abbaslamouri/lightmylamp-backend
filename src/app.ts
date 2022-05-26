@@ -17,9 +17,9 @@ import { IUser } from './models/user'
 dotenv.config()
 
 declare module 'express' {
-  interface Request {
-    user?: IUser
-  }
+	interface Request {
+		user?: IUser
+	}
 }
 
 // declare module 'express-session' {
@@ -37,10 +37,10 @@ declare module 'express' {
 const app = express()
 app.set('trust proxy', true)
 app.use(
-  cors({
-    // credentials: true,
-    // origin: ['http://localhost:3000'],
-  })
+	cors({
+		// credentials: true,
+		// origin: ['http://localhost:3000'],
+	})
 )
 
 // app.use(
@@ -58,13 +58,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 app.get('/v1/ping', async (req, res) => {
-  console.log(`Sending response from container ${os.hostname()}`)
-  res.status(200).json({
-    status: `success`,
-    environment: process.env.NODE_ENV,
-    message: 'pong!!!!!',
-    response: `Sending response from container ${os.hostname()}`,
-  })
+	console.log(`Sending response from container ${os.hostname()}`)
+	res.status(200).json({
+		status: `success`,
+		environment: process.env.NODE_ENV,
+		message: 'pong!!!!!',
+		response: `Sending response from container ${os.hostname()}`,
+	})
 })
 // app.use('/api/v1/categories', categoryRouter)
 app.use('/v1/auth', authRouter)
