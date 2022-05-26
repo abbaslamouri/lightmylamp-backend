@@ -18,7 +18,7 @@ const setProductAuthor = (req: Request, res: Response, next: NextFunction) => {
 }
 
 const createProduct = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('BODY', req.body)
+  // console.log('BODY', req.body)
   // console.log('FILES', req.files)
   // const uploadFiles = []
   // if (req.files) {

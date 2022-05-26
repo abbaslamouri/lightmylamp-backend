@@ -22,7 +22,7 @@ const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFun
 			}
 		}
 	}
-	console.log('uploadFiles', uploadFiles)
+	// console.log('uploadFiles', uploadFiles)
 	const media = await Media.create(uploadFiles)
 	if (!media) req.body.gallery = []
 	else req.body.gallery = media
