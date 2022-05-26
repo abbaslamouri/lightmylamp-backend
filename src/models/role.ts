@@ -1,10 +1,12 @@
 import { Schema, model, Types } from 'mongoose'
+import slugify from 'slugify'
 
 interface IRole {
   _id: Types.ObjectId
   id: Types.ObjectId
   name: string
-  permission: [Types.ObjectId]
+  slug: string
+  permissions: [Types.ObjectId]
 }
 
 const schema = new Schema<IRole>(
@@ -15,10 +17,17 @@ const schema = new Schema<IRole>(
       trim: true,
       maxlength: [100, 'Name cannot be more than 50 characters long'],
     },
-    permission: {
-      type: Schema.Types.ObjectId,
-      ref: 'Media',
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true,
     },
+    permissions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Permission',
+      },
+    ],
 
     // role: {
     //   type: String,
@@ -30,6 +39,21 @@ const schema = new Schema<IRole>(
     timestamps: true,
   }
 )
+
+// Document Middleware, runs only before save() and create()
+schema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true })
+  // this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
+  next()
+})
+
+schema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'permissions',
+    // select: 'name slug',
+  })
+  next()
+})
 
 // Document Middleware, runs before save() and create()
 // schema.pre('save', async function (next) {
