@@ -23,6 +23,18 @@ const createDoc = asyncHandler(async (req: Request, res: Response, next: NextFun
   })
 })
 
+const updateDoc = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const doc = await Permission.findByIdAndUpdate(req.params.id, req.body, {
+    new: true, // Return new document
+    runValidators: true,
+  })
+  if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
+  res.status(200).json({
+    status: 'success',
+    doc,
+  })
+})
+
 const deleteDoc = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   const doc = await Permission.findByIdAndDelete(req.params.id)
   if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
@@ -136,7 +148,7 @@ const deleteDoc = asyncHandler(async (req: Request, res: Response, next: NextFun
 //   })
 // })
 
-export { fetchAll, createDoc, deleteDoc }
+export { fetchAll, createDoc, deleteDoc, updateDoc }
 // exports.getAllUsers = factory.getAll(User)
 // exports.getUser = factory.getOne(User)
 // exports.updateUser = factory.updateOne(User)

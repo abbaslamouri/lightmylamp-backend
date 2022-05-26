@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { IUser, User } from '../../models/user'
+import { IRole, Role } from '../../models/role'
 
 import jwt from 'jsonwebtoken'
 import Stripe from 'stripe'
@@ -134,7 +135,7 @@ const signout = asyncHandler(async (req: Request, res: Response, next: NextFunct
 })
 
 const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('RC', req.cookies)
+  // console.log('RC', req.cookies)
   let token = ''
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1]
@@ -152,14 +153,23 @@ const protect = asyncHandler(async (req: Request, res: Response, next: NextFunct
   next()
 })
 
-// const authorize = (...roles:string[]) =>
-//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-//     if (!roles.includes(req.user.role))
-//       return next(
-//         new AppError('You do not have adequate permisson to perform this action', 403, 'inadequate_permission')
-//       )
-//     next()
-//   })
+const authorize = (roles: string[]) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    console.log('USER', req.user)
+    let forbidden = true
+    if (req.user && req.user.role) {
+      const role = Role.findById(req.user.role)
+      console.log(role)
+      //   for (const prop in roles){
+      //     if (req.user.role.permissions.includes(roles[prop])
+      //     forbidden = false
+      //     // && !roles.includes(req.user.role))
+      //     // return next(new AppError('You do not have adequate permisson to perform this action', 403))
+      //   }
+    }
+
+    next()
+  })
 
 // const isLoggedIn = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 // if (!req.cookies || !req.cookies.jwt) return next()
@@ -222,4 +232,14 @@ const updateCurrentPassword = asyncHandler(async (req: Request, res: Response, n
   // sendTokenResponse(res, 200, user)
 })
 
-export { signup, completeSignup, signin, protect, forgotPassword, resetPassword, signout, updateCurrentPassword }
+export {
+  signup,
+  completeSignup,
+  signin,
+  protect,
+  authorize,
+  forgotPassword,
+  resetPassword,
+  signout,
+  updateCurrentPassword,
+}

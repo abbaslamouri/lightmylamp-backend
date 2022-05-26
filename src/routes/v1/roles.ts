@@ -1,11 +1,11 @@
 import { Router } from 'express'
-import { Permission } from '../../models/permission'
+import { Role } from '../../models/role'
 import { fetchAll, fetchDoc, createDoc, deleteDoc, updateDoc } from '../../controllers/v1/factory'
 import { protect } from '../../controllers/v1/auth'
 
 const router = Router()
 router.use(protect)
-router.route('/').get(fetchAll(Permission)).post(createDoc(Permission))
-router.route('/:id').delete(deleteDoc(Permission)).patch(updateDoc(Permission)).get(fetchDoc(Permission))
+router.route('/').get(fetchAll(Role)).post(createDoc(Role))
+router.route('/:id').delete(deleteDoc(Role)).patch(updateDoc(Role)).get(fetchDoc(Role))
 
 export default router

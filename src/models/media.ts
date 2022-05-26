@@ -1,9 +1,10 @@
 import { Schema, model, Types } from 'mongoose'
 import slugify from 'slugify'
-import { Folder } from './folder'
+// import { Folder } from './folder'
 
 interface IMedia {
   name: string
+  originalName: string
   slug: string
   sortOrder: Number
   permalink: string
@@ -22,6 +23,9 @@ const schema = new Schema<IMedia>(
       maxlength: [500, 'Name cannot be more than 100 characters long'],
       default: 'placeholder.png',
     },
+    originalName: {
+      type: String,
+    },
     slug: {
       type: String,
       unique: true,
@@ -33,7 +37,7 @@ const schema = new Schema<IMedia>(
 
     path: {
       type: String,
-      default: '/placeholder.png',
+      default: '/uploads/placeholder.png',
     },
     url: {
       type: String,
@@ -43,14 +47,16 @@ const schema = new Schema<IMedia>(
     },
     size: {
       type: Number,
-      max: [20000000, 'File size ({{VALUE}}) is greater that the maximum allowed of 200000000'],
+      max: [1 * 1024 * 1024, 'File size ({{VALUE}}) is greater that the maximum allowed of 2 MB'],
       required: [true, 'File Size is required'],
     },
-    folder: { type: Schema.Types.ObjectId, ref: Folder, required: [true, 'Folder is required'] },
+    // folder: { type: Schema.Types.ObjectId, ref: Folder, required: [true, 'Folder is required'] },
   },
   {
     versionKey: false,
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 )
 
@@ -59,7 +65,7 @@ const schema = new Schema<IMedia>(
 // Document Middleware, runs only before save() and create()
 schema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true })
-  this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
+  // this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
   next()
 })
 

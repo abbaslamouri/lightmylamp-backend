@@ -44,7 +44,7 @@ interface IUser {
   shippingAddresses: Array<IShippingAddress>
   billingAddress: IBillingAddress
   description: string
-  sortOrder: Number
+  sortOrder: number
   parent: Types.ObjectId
   gallery: Types.ObjectId
   avatar: Types.ObjectId
@@ -189,6 +189,8 @@ const schema = new Schema<IUser>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 )
 

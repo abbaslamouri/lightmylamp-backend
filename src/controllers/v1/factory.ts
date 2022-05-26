@@ -1,9 +1,9 @@
-import { RequestHandler, Request, Response, NextFunction } from 'express'
-import { ICategory } from '../../models/category'
-import { Model } from 'mongoose'
+import { Request, Response, NextFunction } from 'express'
+// import { ICategory } from '../../models/category'
+// import { Model } from 'mongoose'
 
 // const APIFeatures = require('../utils/APIFeatures')
-// const AppError = require('../utils/AppError')
+import AppError from '../../utils/AppError'
 import asyncHandler from '../../utils/asyncHandler'
 
 // exports.checkId = (req, res, next, val) => {
@@ -12,12 +12,60 @@ import asyncHandler from '../../utils/asyncHandler'
 //   return next()
 // }
 
-const fetchAll = (dbModel: Model<ICategory>) =>
+const fetchAll = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const docs = await dbModel.find()
+    console.log('KKKLLLLLLLL')
+    const docs = await Model.find()
     res.status(200).json({
       status: 'success',
+      results: docs.length,
       docs,
+    })
+  })
+
+const fetchDoc = (Model: any) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    console.log('REqPARAMS', req.params)
+    const doc = await Model.findById(req.params.id)
+    if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
+    res.status(200).json({
+      status: 'succes',
+      doc,
+    })
+  })
+
+const createDoc = (Model: any) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    // console.log('BODY', req.body)
+    // console.log('FILE', req.files)
+    const doc = await Model.create(req.body)
+    if (!doc) return next(new AppError(`We can't create document ${req.body.name}`, 404))
+    res.status(201).json({
+      status: 'success',
+      doc,
+    })
+  })
+
+const updateDoc = (Model: any) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // Return new document
+      runValidators: true,
+    })
+    if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
+    res.status(200).json({
+      status: 'success',
+      doc,
+    })
+  })
+
+const deleteDoc = (Model: any) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const doc = await Model.findByIdAndDelete(req.params.id)
+    if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
+    res.status(204).json({
+      status: 'success',
+      doc,
     })
   })
 
@@ -61,16 +109,6 @@ const fetchAll = (dbModel: Model<ICategory>) =>
 //     // })
 //   })
 
-// exports.deleteDoc = (Model) =>
-//   asyncHandler(async (req, res, next) => {
-//     const doc = await Model.findByIdAndDelete(req.params.id)
-//     if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
-//     res.status(204).json({
-//       status: 'success',
-//       doc,
-//     })
-//   })
-
 // exports.deleteDocs = (Model) =>
 //   asyncHandler(async (req, res, next) => {
 //     console.log('DELETEDOCS')
@@ -82,28 +120,4 @@ const fetchAll = (dbModel: Model<ICategory>) =>
 //     })
 //   })
 
-// exports.updateDoc = (Model) =>
-//   asyncHandler(async (req, res, next) => {
-//     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true, // Return new document
-//       runValidators: true,
-//     })
-//     if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
-//     res.status(200).json({
-//       status: 'success',
-//       doc,
-//     })
-//   })
-
-const createDoc = (dbModel: Model<ICategory>) =>
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('CRREATING', req.body)
-    const doc = await dbModel.create(req.body)
-    // if (!doc) return next(new AppError(`We can't create document ${req.body.name}`, 404))
-    res.status(201).json({
-      status: 'success',
-      doc,
-    })
-  })
-
-export { fetchAll, createDoc }
+export { fetchAll, fetchDoc, createDoc, updateDoc, deleteDoc }

@@ -13,6 +13,8 @@ import errorHandler from './utils/errorHandler'
 import authRouter from './routes/v1/auth'
 import userRouter from './routes/v1/users'
 import permissionRouter from './routes/v1/permissions'
+import roleRouter from './routes/v1/roles'
+import productRouter from './routes/v1/products'
 import { IUser } from './models/user'
 dotenv.config()
 
@@ -54,6 +56,7 @@ app.use(
 // )
 
 app.use(express.json({ limit: '1000kb' }))
+app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
@@ -70,6 +73,8 @@ app.get('/v1/ping', async (req, res) => {
 app.use('/v1/auth', authRouter)
 app.use('/v1/users', userRouter)
 app.use('/v1/permissions', permissionRouter)
+app.use('/v1/roles', roleRouter)
+app.use('/v1/products', productRouter)
 // app.all('*', async (req: Request, res: Response, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 // })

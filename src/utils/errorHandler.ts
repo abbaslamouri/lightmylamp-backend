@@ -62,15 +62,22 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
           })
         }
       }
-    }
-    if (err.code === 11000) {
+    } else if (err.code === 11000) {
       if (err.keyValue) {
         returnError.errors.push({
           path: Object.keys(err.keyValue)[0],
           value: Object.values(err.keyValue)[0],
-          message: `The specified ${Object.keys(err.keyValue)[0]} is already associated with an account.`,
+          message: `${Object.values(err.keyValue)[0]} already exists. Please select a different ${
+            Object.keys(err.keyValue)[0]
+          }`,
         })
       }
+    } else {
+      returnError.errors.push({
+        path: err.name ? err.name : '',
+        value: '',
+        message: err.message,
+      })
     }
 
     // if (err.name && err.name === 'CastError') {
