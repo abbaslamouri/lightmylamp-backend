@@ -65,7 +65,7 @@ app.get('/v1/ping', async (req, res) => {
 	res.status(200).json({
 		status: `success`,
 		environment: process.env.NODE_ENV,
-		message: 'pong!!!!!',
+		message: 'pong!',
 		url: req.url,
 		host: req.hostname,
 		response: `Sending response from container ${os.hostname()}`,
