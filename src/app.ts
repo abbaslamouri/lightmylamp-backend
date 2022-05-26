@@ -68,6 +68,8 @@ app.get('/v1/ping', async (req, res) => {
 		message: 'pong!',
 		url: req.url,
 		host: req.hostname,
+		path: req.path,
+		originalUrl: req.originalUrl,
 		response: `Sending response from container ${os.hostname()}`,
 	})
 })
