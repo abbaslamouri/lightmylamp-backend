@@ -6,6 +6,7 @@ import { Product } from '../../models/product'
 import { Media } from '../../models/media'
 
 const setProductAuthor = (req: Request, res: Response, next: NextFunction) => {
+
   if (req.user) {
     req.body.createdBy = req.user._id
   }
