@@ -14,6 +14,7 @@ import authRouter from './routes/v1/auth'
 import userRouter from './routes/v1/users'
 import permissionRouter from './routes/v1/permissions'
 import roleRouter from './routes/v1/roles'
+import mediaRouter from './routes/v1/media'
 import categoryRouter from './routes/v1/categories'
 import productRouter from './routes/v1/products'
 import { IUser } from './models/user'
@@ -42,7 +43,7 @@ app.set('trust proxy', true)
 app.use(
   cors({
     // credentials: true,
-    // origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000'],
   })
 )
 
@@ -79,6 +80,7 @@ app.use('/v1/auth', authRouter)
 app.use('/v1/users', userRouter)
 app.use('/v1/permissions', permissionRouter)
 app.use('/v1/roles', roleRouter)
+app.use('/v1/media', mediaRouter)
 app.use('/v1/categories', categoryRouter)
 app.use('/v1/products', productRouter)
 // app.all('*', async (req: Request, res: Response, next) => {

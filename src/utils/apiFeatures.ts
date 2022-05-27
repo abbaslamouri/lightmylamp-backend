@@ -1,24 +1,32 @@
 class ApiFeatures {
-  constructor(query, queryObj) {
+  query: any
+  constructor(query: any, public queryObj: any) {
     this.query = query
     this.queryObj = queryObj
   }
 
   filter() {
     // filter query
-    const newQueryObj = { ...this.queryObj }
+    const newQueryObj: {
+      [key: string]: number | string
+    } = { ...this.queryObj }
     const excludedFields = ['page', 'sort', 'limit', 'fields', 'keyword', 'populate']
     excludedFields.forEach((el) => delete newQueryObj[el])
+    // console.log('QO', this.queryObj)
 
     // Advanced filtering
     let queryStr = JSON.stringify(newQueryObj)
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
+    // console.log('QS', queryStr)
+
     this.query = this.query.find(JSON.parse(queryStr))
     return this
   }
 
   search() {
     if (this.queryObj.keyword) {
+      // console.log('KET+YWORD', this.queryObj.keyword)
+
       const regex = new RegExp(this.queryObj.keyword, 'i')
       // this.query = this.query.or({ $text: { $search: this.queryObj.keyword } })
       this.query = this.query.or([{ name: { $regex: regex } }])

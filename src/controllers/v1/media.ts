@@ -26,13 +26,13 @@ const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFun
   const media = await Media.create(uploadFiles)
   if (!media) req.body.gallery = []
   else req.body.gallery = media
-  next()
+
   // const product = await Product.create(req.body)
   // if (!product) return next(new AppError(`We can't create product ${req.body.name}`, 404))
-  // res.status(201).json({
-  //   status: 'success',
-  //   product,
-  // })
+  res.status(201).json({
+    status: 'success',
+    media,
+  })
 })
 
 export { saveMedia }

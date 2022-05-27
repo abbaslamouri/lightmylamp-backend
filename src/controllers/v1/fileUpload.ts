@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     // const randomName = Math.random().toString(20)
     // cb(null, `${Date.now()}-${file.originalname}${extname(file.originalname)}`)
-    cb(null, `${Date.now()}-${file.originalname}`)
+    cb(null, `${Date.now()}${extname(file.originalname)}`)
   },
 })
 const fileUpload = multer({

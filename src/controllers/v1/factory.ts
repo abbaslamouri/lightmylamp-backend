@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 // import { ICategory } from '../../models/category'
 // import { Model } from 'mongoose'
 
-// const APIFeatures = require('../utils/APIFeatures')
+import APIFeatures from '../../utils/apiFeatures'
 import AppError from '../../utils/AppError'
 import asyncHandler from '../../utils/asyncHandler'
 
@@ -12,32 +12,34 @@ import asyncHandler from '../../utils/asyncHandler'
 //   return next()
 // }
 
+// const fetchAll = (Model: any) =>
+//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+//     const docs = await Model.find()
+//     res.status(200).json({
+//       status: 'success',
+//       results: docs.length,
+//       docs,
+//     })
+//   })
+
 const fetchAll = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const docs = await Model.find()
+    // console.log('REqPARAMS', req.query)
+    const totalCount = await Model.countDocuments()
+    const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
+    const docs = await features.query
+    // const docs = await features.query.explain()
     res.status(200).json({
-      status: 'success',
+      status: 'succes',
+      totalCount,
       results: docs.length,
       docs,
     })
   })
 
-// const fetchAll = (Model: any) =>
-//   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-//     const totalCount = await Model.countDocuments()
-//     const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
-//     const docs = await features.query
-//     // const docs = await features.query.explain()
-//     res.status(200).json({
-//       status: 'succes',
-//       totalCount,
-//       docs,
-//     })
-//   })
-
 const fetchDoc = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // console.log('REqPARAMS', req.params)
+    // console.log('REqPARAMS', req.query)
     const doc = await Model.findById(req.params.id)
     if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
     res.status(200).json({
@@ -48,8 +50,8 @@ const fetchDoc = (Model: any) =>
 
 const createDoc = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // console.log('BODY', req.body)
-    // console.log('FILE', req.files)
+    console.log('BODY', req.body)
+    console.log('FILE', req.files)
     const doc = await Model.create(req.body)
     if (!doc) return next(new AppError(`We can't create document ${req.body.name}`, 404))
     res.status(201).json({

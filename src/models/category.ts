@@ -17,20 +17,20 @@ const schema = new Schema<ICategory>(
     name: {
       type: String,
       trim: true,
+      unique: true,
       required: [true, 'Category Name is required'],
       minlength: [3, 'Name too short'],
       maxlength: [100, 'Name too long'],
     },
     slug: {
       type: String,
-      unique: true,
       lowercase: true,
     },
-    permalink: {
-      type: String,
-      unique: true,
-      lowercase: true,
-    },
+    // permalink: {
+    //   type: String,
+    //   unique: true,
+    //   lowercase: true,
+    // },
     description: {
       type: String,
       maxlength: [2000, 'Description cannot be more than 2000 characters long'],
