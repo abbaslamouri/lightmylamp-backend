@@ -24,9 +24,11 @@ import asyncHandler from '../../utils/asyncHandler'
 
 const fetchAll = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // console.log('REqPARAMS', req.query)
+    console.log('REqPARAMS', req.query)
     const totalCount = await Model.countDocuments()
     const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
+    // const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
+
     const docs = await features.query
     // const docs = await features.query.explain()
     res.status(200).json({
