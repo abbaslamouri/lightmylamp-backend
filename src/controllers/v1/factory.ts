@@ -83,6 +83,17 @@ const deleteDoc = (Model: any) =>
     })
   })
 
+const deleteDocs = (Model: any) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    console.log('RQRQ', req.body)
+    const result = await Model.deleteMany(req.body)
+    if (!result) return next(new AppError(`We were not able to delete the documents`, 404))
+    res.status(200).json({
+      status: 'success',
+      deletedCount: result.deletedCount,
+    })
+  })
+
 // exports.fetchAll = (Model) =>
 // asyncHandler(async (req, res, next) => {
 //   // console.log('SESSION', req.session)
@@ -134,4 +145,4 @@ const deleteDoc = (Model: any) =>
 //     })
 //   })
 
-export { fetchAll, fetchDoc, createDoc, updateDoc, deleteDoc }
+export { fetchAll, fetchDoc, createDoc, updateDoc, deleteDoc, deleteDocs }

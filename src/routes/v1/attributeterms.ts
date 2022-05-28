@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Attributeterm } from '../../models/attributeterm'
-import { fetchAll, fetchDoc, createDoc, deleteDoc, updateDoc } from '../../controllers/v1/factory'
+import { fetchAll, fetchDoc, createDoc, updateDoc, deleteDoc, deleteDocs } from '../../controllers/v1/factory'
 // import { createCategory } from '../../controllers/v1/categories'
 import { fileUpload } from '../../controllers/v1/fileUpload'
 // import {} from '../../controllers/v1/products'
@@ -14,6 +14,7 @@ router.route('/:id').get(fetchDoc(Attributeterm))
 
 // router.use(protect)
 // router.use(authorize(['creat-product', 'edit-product']))
+router.route('/delete-many').post(deleteDocs(Attributeterm))
 
 router.route('/').post(createDoc(Attributeterm))
 router.route('/:id').delete(deleteDoc(Attributeterm)).patch(updateDoc(Attributeterm))
