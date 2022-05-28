@@ -16,6 +16,8 @@ import permissionRouter from './routes/v1/permissions'
 import roleRouter from './routes/v1/roles'
 import mediaRouter from './routes/v1/media'
 import categoryRouter from './routes/v1/categories'
+import attributeRouter from './routes/v1/attributes'
+import attributetermsRouter from './routes/v1/attributeterms'
 import productRouter from './routes/v1/products'
 import { IUser } from './models/user'
 dotenv.config()
@@ -82,6 +84,8 @@ app.use('/v1/permissions', permissionRouter)
 app.use('/v1/roles', roleRouter)
 app.use('/v1/media', mediaRouter)
 app.use('/v1/categories', categoryRouter)
+app.use('/v1/attributes', attributeRouter)
+app.use('/v1/attributeterms', attributetermsRouter)
 app.use('/v1/products', productRouter)
 // app.all('*', async (req: Request, res: Response, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))

@@ -5,7 +5,6 @@ import { Media } from './media'
 interface ICategory {
   name: string
   slug: string
-  permalink: string
   description: string
   sortOrder: Number
   parent: Types.ObjectId
