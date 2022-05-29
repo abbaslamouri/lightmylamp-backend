@@ -48,7 +48,7 @@ interface IUser {
   parent: Types.ObjectId
   gallery: Types.ObjectId
   avatar: Types.ObjectId
-  role: Types.ObjectId
+  role: String
   password: unknown
   // passwordConfirm: string
   active: boolean
@@ -152,11 +152,9 @@ const schema = new Schema<IUser>(
       ref: 'Media',
     },
     role: {
-      type: Schema.Types.ObjectId,
-      ref: 'Role',
-      // type: String,
-      // enum: ['admin', 'shop-manager', 'customer', 'user', 'guide', 'lead-guide'],
-      // default: 'user',
+      type: String,
+      enum: ['admin', 'shop-manager', 'customer', 'user'],
+      default: 'user',
     },
     password: {
       type: String,

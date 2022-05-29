@@ -135,13 +135,17 @@ const signout = asyncHandler(async (req: Request, res: Response, next: NextFunct
 })
 
 const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  // console.log('RC', req.cookies)
+  console.log('R Cookies', req.cookies)
+  console.log('R Cookies', req.headers)
   let token = ''
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1]
   } else if (req.cookies && req.cookies.jwt) {
     token = req.cookies.jwt
   }
+
+  console.log('TOKEN', token)
+  console.log('TOKEN', !token)
   if (!token) return next(new AppError('You are not allowed to access these resources, please login', 401))
   if (!process.env.JWT_SECRET) return next(new AppError('We are unable to process your credentials', 401))
   const decoded: any = jwt.verify(token, process.env.JWT_SECRET)
@@ -216,7 +220,7 @@ const resetPassword = asyncHandler(async (req: Request, res: Response, next: Nex
 
 const updateCurrentPassword = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   // console.log(req.user)
-  if (!req.user || !req.user._id) return next(new AppError(`We can't find a user with the supplied credentials}`, 404))
+  if (!req.user || !req.user.id) return next(new AppError(`We can't find a user with the supplied credentials}`, 404))
   const user = await User.findById(req.user._id).select('+password')
   if (!user) return next(new AppError('You must be logged in to change your password', 401))
   if (!(await user.checkPassword(req.body.currentPassword, String(user.password))))

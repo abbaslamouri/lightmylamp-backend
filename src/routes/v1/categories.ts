@@ -9,10 +9,11 @@ import { protect, authorize } from '../../controllers/v1/auth'
 import { saveMedia } from '../../controllers/v1/media'
 
 const router = Router()
+
 router.route('/').get(fetchAll(Category))
 router.route('/:id').get(fetchDoc(Category))
 
-// router.use(protect)
+router.use(protect)
 // router.use(authorize(['creat-product', 'edit-product']))
 
 router.route('/').post(createDoc(Category))
