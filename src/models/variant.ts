@@ -1,8 +1,7 @@
 import { Schema, model, Types } from 'mongoose'
-import { Category } from './category'
-import { Variant } from './variant'
+// import { Category } from './category'
 
-import slugify from 'slugify'
+// import slugify from 'slugify'
 
 // enum ETaxStatus {
 //   taxable,
@@ -22,14 +21,16 @@ import slugify from 'slugify'
 //   notify,
 // }
 
-interface IProduct {
+interface IVariant {
   _id: Types.ObjectId
   id: Types.ObjectId
+  product: Types.ObjectId
+  attributes: []
+
   stripeCustomerId: String
-  name: string
-  slug: string
+  // name: string
+  // slug: string
   // permalink: string
-  productType: string
   price: number
   salePrice: number
   description: string
@@ -44,10 +45,9 @@ interface IProduct {
   allowBackorders: string
   lowStockThreshold: number
   sortOrder: number
-  categories: [Types.ObjectId]
-  attributes: []
-  variants: [Types.ObjectId]
-  createdBy: Types.ObjectId
+  // categories: [Types.ObjectId]
+  // attributes: [Types.ObjectId]
+  // createdBy: Types.ObjectId
   createdAt: Date
   updatedAt: Date
   // getSinedJwtToken(): Promise<string>
@@ -56,19 +56,27 @@ interface IProduct {
   // hasPasswordChanged(JWTTimestamp: number): Promise<boolean>
 }
 
-const schema = new Schema<IProduct>(
+const schema = new Schema<IVariant>(
   {
-    name: {
-      type: String,
-      required: [true, 'Product name is required'],
-      maxlength: [50, 'Name cannot be more than 100 characters long'],
-      trim: true,
-      unique: true,
-    },
-    slug: {
-      type: String,
-      lowercase: true,
-    },
+    product: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+    attributes: [
+      {
+        attribute: { type: Schema.Types.ObjectId, ref: 'Attribute' },
+        attributeterm: { type: Schema.Types.ObjectId, ref: 'Attributetrem' },
+      },
+    ],
+    // attrTerms: [{ type: Schema.Types.ObjectId, ref: 'Attributeterm' }],
+    // name: {
+    //   type: String,
+    //   required: [true, 'Product name is required'],
+    //   maxlength: [50, 'Name cannot be more than 100 characters long'],
+    //   trim: true,
+    //   unique: true,
+    // },
+    // slug: {
+    //   type: String,
+    //   lowercase: true,
+    // },
     // permalink: {
     //   type: String,
     //   unique: true,
@@ -112,9 +120,9 @@ const schema = new Schema<IProduct>(
     //   maxlength: [2000, 'Name cannot be more than 2000 characters long'],
     // },
     gallery: [{ type: Schema.Types.ObjectId, ref: 'Media' }],
-    productType: {
-      type: String,
-    },
+    // productType: {
+    //   type: String,
+    // },
     // virtual: {
     //   type: Boolean,
     //   default: false,
@@ -165,15 +173,15 @@ const schema = new Schema<IProduct>(
       type: Number,
       default: 0,
     },
-    categories: [
-      {
-        // type: mongoose.Schema.Types.ObjectId,
-        // ref: 'Category',
-        type: Schema.Types.ObjectId,
-        ref: Category,
-      },
-    ],
-    attributes: Array,
+    // categories: [
+    //   {
+    //     // type: mongoose.Schema.Types.ObjectId,
+    //     // ref: 'Category',
+    //     type: Schema.Types.ObjectId,
+    //     ref: Category,
+    //   },
+    // ],
+    // attributes: Array,
     // attributes: [
     //   {
     //     type: Schema.Types.ObjectId,
@@ -191,7 +199,6 @@ const schema = new Schema<IProduct>(
     //     // },
     //   },
     // ],
-    // variants: [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
     // soldQty: {
     //   type: Number,
     //   default: 0,
@@ -214,12 +221,12 @@ const schema = new Schema<IProduct>(
     //   type: Number,
     //   default: 0,
     // },
-    createdBy: {
-      // type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Product author is required']
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'Product author is required'],
-    },
+    // createdBy: {
+    //   // type: mongoose.Schema.Types.ObjectId, ref: 'User', required: [true, 'Product author is required']
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'User',
+    //   required: [true, 'Product author is required'],
+    // },
     // tahnkYouPage: {
     //   type: String,
     // },
@@ -238,15 +245,15 @@ const schema = new Schema<IProduct>(
   }
 )
 
-schema.virtual('variants', {
-  ref: 'Variant',
-  foreignField: 'product',
-  localField: '_id',
-})
+// schema.virtual('variants', {
+//   ref: 'Variant',
+//   foreignField: 'product',
+//   localField: '_id',
+// })
 
 // Document Middleware, runs only before save() and create()
 schema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true })
+  // this.slug = slugify(this.name, { lower: true })
   // this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
   next()
 })
@@ -295,5 +302,5 @@ schema.pre(/^find/, function (next) {
   next()
 })
 
-const Product = model<IProduct>('Product', schema)
-export { Product, IProduct }
+const Variant = model<IVariant>('Variant', schema)
+export { Variant, IVariant }

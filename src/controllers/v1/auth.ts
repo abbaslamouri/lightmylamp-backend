@@ -135,8 +135,8 @@ const signout = asyncHandler(async (req: Request, res: Response, next: NextFunct
 })
 
 const protect = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('R Cookies', req.cookies)
-  console.log('R Cookies', req.headers)
+  // console.log('R Cookies', req.cookies)
+  // console.log('R Cookies', req.headers)
   let token = ''
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1]
@@ -144,8 +144,8 @@ const protect = asyncHandler(async (req: Request, res: Response, next: NextFunct
     token = req.cookies.jwt
   }
 
-  console.log('TOKEN', token)
-  console.log('TOKEN', !token)
+  // console.log('TOKEN', token)
+  // console.log('TOKEN', !token)
   if (!token) return next(new AppError('You are not allowed to access these resources, please login', 401))
   if (!process.env.JWT_SECRET) return next(new AppError('We are unable to process your credentials', 401))
   const decoded: any = jwt.verify(token, process.env.JWT_SECRET)
