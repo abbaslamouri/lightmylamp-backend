@@ -19,6 +19,7 @@ import categoryRouter from './routes/v1/categories'
 import attributeRouter from './routes/v1/attributes'
 import attributetermsRouter from './routes/v1/attributeterms'
 import productRouter from './routes/v1/products'
+import variantRouter from './routes/v1/variants'
 import { IUser } from './models/user'
 dotenv.config()
 
@@ -87,6 +88,7 @@ app.use('/v1/categories', categoryRouter)
 app.use('/v1/attributes', attributeRouter)
 app.use('/v1/attributeterms', attributetermsRouter)
 app.use('/v1/products', productRouter)
+app.use('/v1/variants', variantRouter)
 // app.all('*', async (req: Request, res: Response, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 // })

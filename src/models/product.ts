@@ -4,6 +4,14 @@ import { Variant } from './variant'
 
 import slugify from 'slugify'
 
+interface IAttribute {
+  attribute: Types.ObjectId
+  terms: [Types.ObjectId]
+  defaultTerm: Types.ObjectId
+  enabled: boolean
+  variation: boolean
+}
+
 // enum ETaxStatus {
 //   taxable,
 //   shippingOnly,
@@ -45,7 +53,7 @@ interface IProduct {
   lowStockThreshold: number
   sortOrder: number
   categories: [Types.ObjectId]
-  attributes: []
+  attributes: [IAttribute]
   variants: [Types.ObjectId]
   createdBy: Types.ObjectId
   createdAt: Date
@@ -173,24 +181,24 @@ const schema = new Schema<IProduct>(
         ref: Category,
       },
     ],
-    attributes: Array,
-    // attributes: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Attribute',
-    //     // attribute: { type: mongoose.Schema.Types.ObjectId, ref: 'Attribute' },
-    //     // terms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Attributeterm' }],
-    //     // defaultTerm: { type: mongoose.Schema.Types.ObjectId, ref: 'Attributeterm' },
-    //     // enabled: {
-    //     //   type: Boolean,
-    //     //   default: false,
-    //     // },
-    //     // variation: {
-    //     //   type: Boolean,
-    //     //   default: false,
-    //     // },
-    //   },
-    // ],
+    // attributes: Array,
+    attributes: [
+      {
+        // type: Schema.Types.ObjectId,
+        // ref: 'Attribute',
+        attribute: { type: Schema.Types.ObjectId, ref: 'Attribute' },
+        terms: [{ type: Schema.Types.ObjectId, ref: 'Attributeterm' }],
+        defaultTerm: { type: Schema.Types.ObjectId, ref: 'Attributeterm' },
+        enabled: {
+          type: Boolean,
+          default: false,
+        },
+        variation: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
     // variants: [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
     // soldQty: {
     //   type: Number,
@@ -252,11 +260,11 @@ schema.pre('save', function (next) {
 })
 
 schema.pre(/^find/, function (next) {
-  // this.populate({
-  //   path: 'categories',
-  //   // model: 'Category',
-  //   // select: 'name slug permalink',
-  // })
+  this.populate({
+    path: 'categories',
+    // model: 'Category',
+    // select: 'name slug permalink',
+  })
   this.populate({
     path: 'gallery',
     // model: 'Media',
@@ -267,31 +275,31 @@ schema.pre(/^find/, function (next) {
   //     model: 'Variant',
   //     select: '-createdAt',
   //   })
-  // .populate({
-  //   path: 'attributes',
-  //   model: 'Attribute',
-  //   select: '-createdAt',
-  // })
+  this.populate({
+    path: 'attributes',
+    // model: 'Attribute',
+    // select: '-createdAt',
+  })
   // this.populate({
   //   path: 'attributes',
   //   // model: 'Attribute',
   //   // select: '-createdAt',
   // })
-  // this.populate({
-  //   path: 'attributes.attribute',
-  //   model: 'Attribute',
-  //   select: '-createdAt',
-  // })
-  // this.populate({
-  //   path: 'attributes.terms',
-  //   model: 'Attributeterm',
-  //   select: '-createdAt',
-  // })
-  // this.populate({
-  //   path: 'attributes.defaultTerm',
-  //   model: 'Attributeterm',
-  //   select: '-createdAt',
-  // })
+  this.populate({
+    path: 'attributes.attribute',
+    // model: 'Attribute',
+    // select: '-createdAt',
+  })
+  this.populate({
+    path: 'attributes.terms',
+    // model: 'Attributeterm',
+    // select: '-createdAt',
+  })
+  this.populate({
+    path: 'attributes.defaultTerm',
+    // model: 'Attributeterm',
+    // select: '-createdAt',
+  })
   next()
 })
 
