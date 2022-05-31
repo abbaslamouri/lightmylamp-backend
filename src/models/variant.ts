@@ -24,7 +24,7 @@ import { Schema, model, Types } from 'mongoose'
 interface IVariant {
   _id: Types.ObjectId
   id: Types.ObjectId
-  product: Types.ObjectId
+  productId: Types.ObjectId
   attributes: []
 
   stripeCustomerId: String
@@ -58,7 +58,7 @@ interface IVariant {
 
 const schema = new Schema<IVariant>(
   {
-    product: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
+    productId: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
     attributes: [
       {
         attribute: { type: Schema.Types.ObjectId, ref: 'Attribute' },
