@@ -7,7 +7,7 @@ interface IMedia {
   originalName: string
   slug: string
   sortOrder: Number
-  permalink: string
+  // permalink: string
   path: string
   url: string
   mimetype: string

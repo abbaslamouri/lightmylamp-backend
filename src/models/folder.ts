@@ -4,7 +4,7 @@ import slugify from 'slugify'
 interface IFolder {
   name: string
   slug: string
-  permalink: String
+  // permalink: String
   sortOrder: Number
 }
 
@@ -20,10 +20,10 @@ const schema = new Schema<IFolder>(
       type: String,
       unique: true,
     },
-    permalink: {
-      type: String,
-      unique: true,
-    },
+    // permalink: {
+    //   type: String,
+    //   unique: true,
+    // },
     sortOrder: {
       type: Number,
       default: 0,
@@ -37,7 +37,7 @@ const schema = new Schema<IFolder>(
 // Document Middleware, runs only before save() and create()
 schema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true })
-  this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
+  // this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
   next()
 })
 
