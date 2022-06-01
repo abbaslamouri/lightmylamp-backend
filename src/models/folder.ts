@@ -31,6 +31,8 @@ const schema = new Schema<IFolder>(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 )
 
