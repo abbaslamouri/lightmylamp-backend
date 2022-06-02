@@ -1,9 +1,30 @@
 import { unlink } from 'fs'
 import { Request, Response, NextFunction } from 'express'
+import APIFeatures from '../../utils/apiFeatures'
 import AppError from '../../utils/AppError'
 import asyncHandler from '../../utils/asyncHandler'
 import { Media } from '../../models/media'
 import { Folder } from '../../models/folder'
+
+const fetchAll = (Model: any) =>
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    // console.log('REqPARAMS', req.query)
+    let totalCount
+    if (req.query.folder) {
+      const files = await Model.find({ folder: req.query.folder })
+      console.log('FFFFF', files)
+      totalCount = files.length
+    } else totalCount = await Model.countDocuments()
+    const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
+    const docs = await features.query
+    // const docs = await features.query.explain()
+    res.status(200).json({
+      status: 'succes',
+      totalCount,
+      results: docs.length,
+      docs,
+    })
+  })
 
 const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   console.log('FILES', req.files)
@@ -45,4 +66,4 @@ const deleteMedia = asyncHandler(async (req: Request, res: Response, next: NextF
     doc,
   })
 })
-export { saveMedia, deleteMedia }
+export { fetchAll, saveMedia, deleteMedia }
