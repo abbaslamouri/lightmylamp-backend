@@ -3,10 +3,10 @@ import multer from 'multer'
 import { extname } from 'path'
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, './public/uploads')
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     // const randomName = Math.random().toString(20)
     // cb(null, `${Date.now()}-${file.originalname}${extname(file.originalname)}`)
     cb(null, `${Date.now()}${extname(file.originalname)}`)
@@ -14,10 +14,10 @@ const storage = multer.diskStorage({
 })
 const fileUpload = multer({
   storage,
-  limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+  limits: { fileSize: 1 * 1024 * 1024, files: 20, fields: 1 }, // 1MB
   fileFilter: (req, file, cb) => {
     // console.log(file)
-    if (file.mimetype.includes('image')) {
+    if (file.mimetype.includes('image') || file.mimetype.includes('pdf')) {
       cb(null, true)
     } else {
       cb(null, false)
@@ -26,6 +26,6 @@ const fileUpload = multer({
       return cb(err)
     }
   },
-}).array('gallery', 10)
+}).array('gallery')
 
 export { fileUpload }
