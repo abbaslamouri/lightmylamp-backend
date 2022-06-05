@@ -37,7 +37,7 @@ interface IProduct {
   name: string
   slug: string
   acsPartNumber: string
-  eligibility: string
+  eligibilities: string
   nextHigherAssemblies: string
   // oem: string
   oemPartNumber: string
@@ -86,16 +86,8 @@ const schema = new Schema<IProduct>(
       type: String,
       lowercase: true,
     },
-    eligibility: [
-      {
-        type: String,
-      },
-    ],
-    nextHigherAssemblies: [
-      {
-        type: String,
-      },
-    ],
+    eligibilities: [{ type: Schema.Types.ObjectId, ref: 'Eligibility' }],
+    nextHigherAssemblies: [{ type: Schema.Types.ObjectId, ref: 'Nexthigherassembly' }],
     // oem: {
     //   type: String,
     // },
@@ -286,6 +278,7 @@ schema.pre('save', function (next) {
   next()
 })
 
+
 schema.pre(/^find/, function (next) {
   this.populate({
     path: 'categories',
@@ -307,11 +300,16 @@ schema.pre(/^find/, function (next) {
     // model: 'Attribute',
     // select: '-createdAt',
   })
-  // this.populate({
-  //   path: 'attributes',
-  //   // model: 'Attribute',
-  //   // select: '-createdAt',
-  // })
+  this.populate({
+    path: 'eligibilities',
+    // model: 'Attribute',
+    // select: '-createdAt',
+  })
+  this.populate({
+    path: 'nextHigherAssemblies',
+    // model: 'Attribute',
+    // select: '-createdAt',
+  })
   this.populate({
     path: 'attributes.attribute',
     // model: 'Attribute',

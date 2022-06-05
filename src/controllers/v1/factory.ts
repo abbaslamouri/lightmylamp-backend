@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express'
 import APIFeatures from '../../utils/apiFeatures'
 import AppError from '../../utils/AppError'
 import asyncHandler from '../../utils/asyncHandler'
+import { Eligibility } from '../../models/eligibility'
 
 // exports.checkId = (req, res, next, val) => {
 //   console.log(`Document id is ${val}`)
@@ -24,7 +25,8 @@ import asyncHandler from '../../utils/asyncHandler'
 
 const fetchAll = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const indexes = await Model.cleanIndexes()
+    // const indexes = await Model.cleanIndexes()
+    // Eligibility.collection.drop()
     // console.log('XXXXX', indexes)
     // console.log('XXXXX', indexes)
     // console.log('REqPARAMS', req.query)

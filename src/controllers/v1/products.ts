@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { parse } from 'csv-parse'
-import { Types } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import slugify from 'slugify'
 
 // const dotenv = require('dotenv')
@@ -33,6 +33,11 @@ const setProductAuthor = (req: Request, res: Response, next: NextFunction) => {
 const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
   console.log('BODY', req.body)
   console.log('FILES', req.files)
+
+  const db = mongoose.connection.db
+  // const collections = await db.listCollections().toArray()
+  // console.log('Collections', collections)
+  db.dropCollection('products')
 
   // dbConnect()
 
@@ -90,10 +95,10 @@ const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFuncti
         const product = { ...data[prop] }
         product.categories = []
         product.gallery = []
-        product.eligibility = []
+        product.eligibilities = []
         product.nextHigherAssemblies = []
 
-        // product.price = Math.round(product.price * 100)
+        product.price = product.price * 100
         product.salePrice = product.price
         product.tbq = data[prop].tbq ? true : false
         product.createdBy = (req as any).user.id
@@ -105,26 +110,28 @@ const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFuncti
         if (image.length) product.gallery.push(image[0].id)
 
         const categoryArr = [...data[prop].categories.split('|')]
-        for (const prop in categoryArr) {
-          categoryArr[prop] = categoryArr[prop].trim()
-          const found = await Category.find({ name: categoryArr[prop] })
-          if (!found.length) {
-            const category = await Category.create({ name: categoryArr[prop] })
-            if (category) product.categories.push(category.id)
-          } else {
-            product.categories.push(found[0].id)
+        if (categoryArr.length) {
+          for (const prop in categoryArr) {
+            categoryArr[prop] = categoryArr[prop].trim()
+            const found = await Category.find({ name: categoryArr[prop] })
+            if (!found.length) {
+              const category = await Category.create({ name: categoryArr[prop] })
+              if (category) product.categories.push(category.id)
+            } else {
+              product.categories.push(found[0].id)
+            }
           }
         }
 
-        const eligibilityArr = [...data[prop].eligibility.split('|')]
+        const eligibilityArr = [...data[prop].eligibilities.split('|')]
         for (const prop in eligibilityArr) {
           eligibilityArr[prop] = eligibilityArr[prop].trim()
           const found = await Eligibility.find({ name: eligibilityArr[prop] })
           if (!found.length) {
             const eligibility = await Eligibility.create({ name: eligibilityArr[prop] })
-            if (eligibility) product.eligibility.push(eligibility.id)
+            if (eligibility) product.eligibilities.push(eligibility.id)
           } else {
-            product.eligibility.push(found[0].id)
+            product.eligibilities.push(found[0].id)
           }
         }
 
