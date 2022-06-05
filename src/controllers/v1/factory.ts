@@ -24,6 +24,9 @@ import asyncHandler from '../../utils/asyncHandler'
 
 const fetchAll = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const indexes = await Model.cleanIndexes()
+    // console.log('XXXXX', indexes)
+    // console.log('XXXXX', indexes)
     // console.log('REqPARAMS', req.query)
     const totalCount = await Model.countDocuments()
     const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
@@ -50,8 +53,8 @@ const fetchDoc = (Model: any) =>
 
 const createDoc = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('BODY', req.body)
-    console.log('FILE', req.files)
+    // console.log('BODY', req.body)
+    // console.log('FILE', req.files)
     const doc = await Model.create(req.body)
     if (!doc) return next(new AppError(`We can't create document ${req.body.name}`, 404))
     res.status(201).json({
@@ -85,7 +88,7 @@ const deleteDoc = (Model: any) =>
 
 const deleteDocs = (Model: any) =>
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    console.log('RQRQ', req.body)
+    // console.log('RQRQ', req.body)
     const result = await Model.deleteMany(req.body)
     if (!result) return next(new AppError(`We were not able to delete the documents`, 404))
     res.status(200).json({

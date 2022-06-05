@@ -19,6 +19,7 @@ const schema = new Schema<IMedia>(
   {
     name: {
       type: String,
+      unique: true,
       required: [true, 'File Name is required'],
       maxlength: [500, 'Name cannot be more than 100 characters long'],
       default: 'placeholder.png',
@@ -28,7 +29,6 @@ const schema = new Schema<IMedia>(
     },
     slug: {
       type: String,
-      unique: true,
     },
     sortOrder: {
       type: Number,
@@ -53,7 +53,7 @@ const schema = new Schema<IMedia>(
     folder: { type: Schema.Types.ObjectId, ref: 'Folder', required: [true, 'Folder is required'] },
   },
   {
-    versionKey: false,
+    // versionKey: false,
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },

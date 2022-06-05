@@ -8,7 +8,7 @@ import { fileUpload } from '../../controllers/v1/fileUpload'
 // import {} from '../../controllers/v1/products'
 
 import { protect, authorize } from '../../controllers/v1/auth'
-import { saveMedia } from '../../controllers/v1/media'
+import { seedDb } from '../../controllers/v1/products'
 
 const router = Router()
 
@@ -18,6 +18,7 @@ router.route('/:id').get(fetchDoc(Product))
 router.use(protect)
 // router.use(authorize(['creat-product', 'edit-product']))
 
+router.route('/seeder').post(setProductAuthor, fileUpload, seedDb)
 router.route('/').post(setProductAuthor, createDoc(Product))
 router.route('/:id').delete(deleteDoc(Product)).patch(updateDoc(Product))
 

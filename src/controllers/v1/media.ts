@@ -6,29 +6,27 @@ import asyncHandler from '../../utils/asyncHandler'
 import { Media } from '../../models/media'
 import { Folder } from '../../models/folder'
 
-const fetchAll = (Model: any) =>
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // console.log('REqPARAMS', req.query)
-    let totalCount
-    if (req.query.folder) {
-      const files = await Model.find({ folder: req.query.folder })
-      console.log('FFFFF', files)
-      totalCount = files.length
-    } else totalCount = await Model.countDocuments()
-    const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
-    const docs = await features.query
-    // const docs = await features.query.explain()
-    res.status(200).json({
-      status: 'succes',
-      totalCount,
-      results: docs.length,
-      docs,
-    })
+const fetchAllMedia = async (req: Request, res: Response, next: NextFunction) => {
+  // console.log('REqPARAMS', req.query)
+  const indexes = await (Media as any).cleanIndexes()
+  console.log('INDEXES', indexes)
+  let totalCount
+  if (req.query.folder) totalCount = await Media.countDocuments({ folder: req.query.folder })
+  else totalCount = await Media.countDocuments()
+  const features = new APIFeatures(Media.find(), req.query).filter().sort().fields().search().paginate()
+  const docs = await features.query
+  // const docs = await features.query.explain()
+  res.status(200).json({
+    status: 'succes',
+    totalCount,
+    results: docs.length,
+    docs,
   })
+}
 
 const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('FILES', req.files)
-  console.log('FILES', req.body)
+  // console.log('FILES', req.files)
+  // console.log('FILES', req.body)
   const uploadFiles = []
   const folder = await Folder.findById(req.body.folder)
   if (req.files) {
@@ -53,7 +51,7 @@ const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFun
 })
 
 const deleteMedia = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('FILES', req.params)
+  // console.log('FILES', req.params)
   const doc = await Media.findByIdAndDelete(req.params.id)
   if (!doc) return next(new AppError(`We can't find a document with id = ${req.params.id}`, 404))
   unlink(`./public/${doc.path}`, (err) => {
@@ -66,4 +64,4 @@ const deleteMedia = asyncHandler(async (req: Request, res: Response, next: NextF
     doc,
   })
 })
-export { fetchAll, saveMedia, deleteMedia }
+export { fetchAllMedia, saveMedia, deleteMedia }

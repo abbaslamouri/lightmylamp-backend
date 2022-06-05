@@ -36,18 +36,23 @@ interface IProduct {
   stripeCustomerId: String
   name: string
   slug: string
-  // permalink: string
+  acsPartNumber: string
+  eligibility: string
+  nextHigherAssemblies: string
+  // oem: string
+  oemPartNumber: string
   productType: string
   price: number
   salePrice: number
   description: string
   excerpt: string
   active: boolean
-  gallery: Types.ObjectId
+  gallery: [Types.ObjectId]
   sku: string
   taxStatus: string
   taxClass: string
   manageInventory: boolean
+  tbq: boolean
   stockQty: number
   allowBackorders: string
   lowStockThreshold: number
@@ -76,6 +81,28 @@ const schema = new Schema<IProduct>(
     slug: {
       type: String,
       lowercase: true,
+    },
+    acsPartNumber: {
+      type: String,
+      lowercase: true,
+    },
+    eligibility: [
+      {
+        type: String,
+      },
+    ],
+    nextHigherAssemblies: [
+      {
+        type: String,
+      },
+    ],
+    // oem: {
+    //   type: String,
+    // },
+    oemPartNumber: { type: Schema.Types.ObjectId, ref: 'Oempartnumber' },
+    tbq: {
+      type: Boolean,
+      default: false,
     },
     // permalink: {
     //   type: String,
@@ -300,6 +327,12 @@ schema.pre(/^find/, function (next) {
     // model: 'Attributeterm',
     // select: '-createdAt',
   })
+  this.populate({
+    path: 'oemPartNumber',
+    // model: 'Attributeterm',
+    // select: '-createdAt',
+  })
+
   next()
 })
 

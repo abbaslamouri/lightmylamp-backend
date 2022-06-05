@@ -16,6 +16,8 @@ import permissionRouter from './routes/v1/permissions'
 import roleRouter from './routes/v1/roles'
 import mediaRouter from './routes/v1/media'
 import categoryRouter from './routes/v1/categories'
+import eligibilityRouter from './routes/v1/eligibilities'
+import nexthigherassemblyRouter from './routes/v1/nexthigherassemblies'
 import attributeRouter from './routes/v1/attributes'
 import attributetermsRouter from './routes/v1/attributeterms'
 import productRouter from './routes/v1/products'
@@ -85,6 +87,8 @@ app.use('/v1/permissions', permissionRouter)
 app.use('/v1/roles', roleRouter)
 app.use('/v1/media', mediaRouter)
 app.use('/v1/categories', categoryRouter)
+app.use('/v1/eligibilities', eligibilityRouter)
+app.use('/v1/nexthigherassemblies', nexthigherassemblyRouter)
 app.use('/v1/attributes', attributeRouter)
 app.use('/v1/attributeterms', attributetermsRouter)
 app.use('/v1/products', productRouter)
