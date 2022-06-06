@@ -8,8 +8,8 @@ import { Folder } from '../../models/folder'
 
 const fetchAllMedia = async (req: Request, res: Response, next: NextFunction) => {
   // console.log('REqPARAMS', req.query)
-  const indexes = await (Media as any).cleanIndexes()
-  console.log('INDEXES', indexes)
+  // const indexes = await (Media as any).cleanIndexes()
+  // console.log('INDEXES', indexes)
   let totalCount
   if (req.query.folder) totalCount = await Media.countDocuments({ folder: req.query.folder })
   else totalCount = await Media.countDocuments()

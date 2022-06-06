@@ -31,13 +31,18 @@ const setProductAuthor = (req: Request, res: Response, next: NextFunction) => {
 }
 
 const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  console.log('BODY', req.body)
-  console.log('FILES', req.files)
+  // console.log('BODY', req.body)
+  // console.log('FILES', req.files)
 
   const db = mongoose.connection.db
-  // const collections = await db.listCollections().toArray()
+  const collections = await db.listCollections().toArray()
   // console.log('Collections', collections)
   db.dropCollection('products')
+  db.dropCollection('categories')
+  db.dropCollection('eligibilities')
+  db.dropCollection('nexthigherassemblies')
+  // db.dropCollection('media')
+  // return
 
   // dbConnect()
 
@@ -98,7 +103,7 @@ const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFuncti
         product.eligibilities = []
         product.nextHigherAssemblies = []
 
-        product.price = product.price * 100
+        product.price = Math.round(product.price * 100)
         product.salePrice = product.price
         product.tbq = data[prop].tbq ? true : false
         product.createdBy = (req as any).user.id
@@ -109,41 +114,47 @@ const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFuncti
         const image = await Media.find({ originalName: `${data[prop].productImage}.jpg` })
         if (image.length) product.gallery.push(image[0].id)
 
-        const categoryArr = [...data[prop].categories.split('|')]
-        if (categoryArr.length) {
-          for (const prop in categoryArr) {
-            categoryArr[prop] = categoryArr[prop].trim()
-            const found = await Category.find({ name: categoryArr[prop] })
-            if (!found.length) {
-              const category = await Category.create({ name: categoryArr[prop] })
-              if (category) product.categories.push(category.id)
-            } else {
-              product.categories.push(found[0].id)
+        if (data[prop].categories) {
+          const categoryArr = [...data[prop].categories.split('|')]
+          if (categoryArr.length) {
+            for (const prop in categoryArr) {
+              categoryArr[prop] = categoryArr[prop].trim()
+              const found = await Category.find({ name: categoryArr[prop] })
+              if (!found.length) {
+                const category = await Category.create({ name: categoryArr[prop] })
+                if (category) product.categories.push(category.id)
+              } else {
+                product.categories.push(found[0].id)
+              }
             }
           }
         }
 
-        const eligibilityArr = [...data[prop].eligibilities.split('|')]
-        for (const prop in eligibilityArr) {
-          eligibilityArr[prop] = eligibilityArr[prop].trim()
-          const found = await Eligibility.find({ name: eligibilityArr[prop] })
-          if (!found.length) {
-            const eligibility = await Eligibility.create({ name: eligibilityArr[prop] })
-            if (eligibility) product.eligibilities.push(eligibility.id)
-          } else {
-            product.eligibilities.push(found[0].id)
+        if (data[prop].eligibilities) {
+          const eligibilityArr = [...data[prop].eligibilities.split('|')]
+          for (const prop in eligibilityArr) {
+            eligibilityArr[prop] = eligibilityArr[prop].trim()
+            const found = await Eligibility.find({ name: eligibilityArr[prop] })
+            if (!found.length) {
+              const eligibility = await Eligibility.create({ name: eligibilityArr[prop] })
+              if (eligibility) product.eligibilities.push(eligibility.id)
+            } else {
+              product.eligibilities.push(found[0].id)
+            }
           }
         }
 
-        const nextHigherAssembliesArr = [...data[prop].nextHigherAssemblies.split('|')]
-        for (const prop in nextHigherAssembliesArr) {
-          nextHigherAssembliesArr[prop] = nextHigherAssembliesArr[prop].trim()
-          const found = await Nexthigherassembly.find({ name: nextHigherAssembliesArr[prop] })
-          if (!found.length) {
-            const nextHigherAssembly = await Nexthigherassembly.create({ name: nextHigherAssembliesArr[prop] })
-            if (nextHigherAssembly) product.nextHigherAssemblies.push(nextHigherAssembly.id)
-          } else {
-            product.nextHigherAssemblies.push(found[0].id)
+        if (data[prop].nextHigherAssemblies) {
+          const nextHigherAssembliesArr = [...data[prop].nextHigherAssemblies.split('|')]
+          for (const prop in nextHigherAssembliesArr) {
+            nextHigherAssembliesArr[prop] = nextHigherAssembliesArr[prop].trim()
+            const found = await Nexthigherassembly.find({ name: nextHigherAssembliesArr[prop] })
+            if (!found.length) {
+              const nextHigherAssembly = await Nexthigherassembly.create({ name: nextHigherAssembliesArr[prop] })
+              if (nextHigherAssembly) product.nextHigherAssemblies.push(nextHigherAssembly.id)
+            } else {
+              product.nextHigherAssemblies.push(found[0].id)
+            }
           }
         }
 
@@ -175,15 +186,18 @@ const seedDb = asyncHandler(async (req: Request, res: Response, next: NextFuncti
         product.oemPartNumber = oemPartNumber.id
 
         console.log(product)
+        await Product.create(product)
+        // if (!found.length) {
+        // }
 
-        products.push(product)
+        // products.push(product)
       }
-      console.log('PRODUCTS', products)
-      const docs = await Product.create(products)
+      // console.log('PRODUCTS', products)
+      // const docs = await Product.create(products)
 
       res.status(200).json({
         status: 'succes',
-        docs,
+        // docs,
       })
     })
     .on('error', function (error) {
