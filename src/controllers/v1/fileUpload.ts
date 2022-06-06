@@ -6,7 +6,7 @@ import { extname } from 'path'
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, './public/uploads')
-    console.log('FILE', file)
+    // console.log('FILE', file)
   },
   filename: (req, file, cb) => {
     // console.log(file.originalname)
@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 })
 const fileUpload = multer({
   storage,
-  limits: { fileSize: 1 * 1024 * 1024, files: 200, fields: 1 }, // 1MB
+  limits: { fileSize: 1 * 1024 * 1024, files: 2000, fields: 50 }, // 1MB
   fileFilter: (req, file, cb) => {
     // console.log(file)
     if (file.mimetype.includes('image') || file.mimetype.includes('pdf') || file.mimetype.includes('csv')) {

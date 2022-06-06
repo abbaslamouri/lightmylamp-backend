@@ -4,7 +4,7 @@ import APIFeatures from '../../utils/apiFeatures'
 import AppError from '../../utils/AppError'
 import asyncHandler from '../../utils/asyncHandler'
 import { Media } from '../../models/media'
-import { Folder } from '../../models/folder'
+// import { Folder } from '../../models/folder'
 
 const fetchAllMedia = async (req: Request, res: Response, next: NextFunction) => {
   // console.log('REqPARAMS', req.query)
@@ -28,7 +28,7 @@ const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFun
   // console.log('FILES', req.files)
   // console.log('FILES', req.body)
   const uploadFiles = []
-  const folder = await Folder.findById(req.body.folder)
+  // const folder = await Folder.findById(req.body.folder)
   if (req.files) {
     for (let prop in req.files) {
       const filename = (req as any).files[prop].filename
@@ -38,7 +38,7 @@ const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFun
         name: filename,
         path: `${path[path.length - 1]}/${filename}`,
         originalName: (req as any).files[prop].originalname,
-        folder,
+        // folder,
       }
     }
   }

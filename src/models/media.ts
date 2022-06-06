@@ -12,7 +12,7 @@ interface IMedia {
   url: string
   mimetype: string
   size: Number
-  folder: Types.ObjectId
+  // folder: Types.ObjectId
 }
 
 const schema = new Schema<IMedia>(
@@ -50,7 +50,7 @@ const schema = new Schema<IMedia>(
       max: [1 * 1024 * 1024, 'File size ({{VALUE}}) is greater that the maximum allowed of 2 MB'],
       required: [true, 'File Size is required'],
     },
-    folder: { type: Schema.Types.ObjectId, ref: 'Folder', required: [true, 'Folder is required'] },
+    // folder: { type: Schema.Types.ObjectId, ref: 'Folder', required: [true, 'Folder is required'] },
   },
   {
     // versionKey: false,
