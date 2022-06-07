@@ -10,10 +10,10 @@ const fetchAllMedia = async (req: Request, res: Response, next: NextFunction) =>
   // console.log('REqPARAMS', req.query)
   // const indexes = await (Media as any).cleanIndexes()
   // console.log('INDEXES', indexes)
-  let totalCount
-  if (req.query.folder) totalCount = await Media.countDocuments({ folder: req.query.folder })
-  else totalCount = await Media.countDocuments()
-  const features = new APIFeatures(Media.find(), req.query).filter().sort().fields().search().paginate()
+  // let totalCount
+  // if (req.query.folder) totalCount = await Media.countDocuments({ folder: req.query.folder })
+  const totalCount = await Media.countDocuments()
+  const features = new APIFeatures(Media.find(), req.query, Media).filter().sort().fields().search().paginate()
   const docs = await features.query
   // const docs = await features.query.explain()
   res.status(200).json({

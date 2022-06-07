@@ -1,8 +1,10 @@
 class ApiFeatures {
   query: any
-  constructor(query: any, public queryObj: any) {
+  DBModel: any
+  constructor(query: any, public queryObj: any, DBModel: any) {
     this.query = query
     this.queryObj = queryObj
+    this.DBModel = DBModel
   }
 
   filter() {
@@ -22,10 +24,18 @@ class ApiFeatures {
   }
 
   search() {
-    if (this.queryObj.keyword) {
-      const regex = new RegExp(this.queryObj.keyword, 'i')
-      // this.query = this.query.or({ $text: { $search: this.queryObj.keyword } })
-      this.query = this.query.or([{ name: { $regex: regex } }, { originalName: { $regex: regex } }])
+    console.log('QQQQQ', this.DBModel.collection.collectionName)
+    if (!this.queryObj.keyword) return this
+    const regex = new RegExp(this.queryObj.keyword, 'i')
+
+    if (this.DBModel.collection.collectionName === 'media') {
+      this.query = this.query.or([
+        { name: { $regex: regex } },
+        { originalName: { $regex: regex } },
+        { mimetype: { $regex: regex } },
+      ])
+    } else {
+      this.query = this.query.or([{ name: { $regex: regex } }])
     }
     return this
   }

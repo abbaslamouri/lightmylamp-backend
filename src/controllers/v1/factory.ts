@@ -31,7 +31,7 @@ const fetchAll = (Model: any) =>
     // console.log('XXXXX', indexes)
     // console.log('REqPARAMS', req.query)
     const totalCount = await Model.countDocuments()
-    const features = new APIFeatures(Model.find(), req.query).filter().sort().fields().search().paginate()
+    const features = new APIFeatures(Model.find(), req.query, Model).filter().sort().fields().search().paginate()
     const docs = await features.query
     // const docs = await features.query.explain()
     res.status(200).json({
