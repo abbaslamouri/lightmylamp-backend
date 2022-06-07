@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { Media } from '../../models/media'
-import { Folder } from '../../models/folder'
+// import { Folder } from '../../models/folder'
 import { fetchAll, fetchDoc, createDoc, deleteDoc, deleteDocs, updateDoc } from '../../controllers/v1/factory'
 // import { setProductAuthor, createProduct } from '../../controllers/v1/products'
 import { fileUpload } from '../../controllers/v1/fileUpload'
@@ -10,10 +10,10 @@ import { protect, authorize } from '../../controllers/v1/auth'
 import { fetchAllMedia, saveMedia, deleteMedia } from '../../controllers/v1/media'
 
 const router = Router()
-router.route('/folders').get(fetchAll(Folder))
-router.route('/folders/').post(createDoc(Folder))
-router.route('/folders/:id').patch(updateDoc(Folder))
-router.route('/folders/:id').delete(deleteDoc(Folder))
+// router.route('/folders').get(fetchAll(Folder))
+// router.route('/folders/').post(createDoc(Folder))
+// router.route('/folders/:id').patch(updateDoc(Folder))
+// router.route('/folders/:id').delete(deleteDoc(Folder))
 
 
 // router.route('/').get(fetchAll(Media))

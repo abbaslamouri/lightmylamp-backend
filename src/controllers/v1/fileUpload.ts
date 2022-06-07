@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 })
 const fileUpload = multer({
   storage,
-  limits: { fileSize: 1 * 1024 * 1024, files: 2000, fields: 50 }, // 1MB
+  limits: { fileSize: 10 * 1024 * 1024, files: 2000, fields: 50 }, // 1MB
   fileFilter: (req, file, cb) => {
     // console.log(file)
     if (file.mimetype.includes('image') || file.mimetype.includes('pdf') || file.mimetype.includes('csv')) {

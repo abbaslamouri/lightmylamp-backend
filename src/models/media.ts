@@ -47,7 +47,7 @@ const schema = new Schema<IMedia>(
     },
     size: {
       type: Number,
-      max: [1 * 1024 * 1024, 'File size ({{VALUE}}) is greater that the maximum allowed of 2 MB'],
+      max: [10 * 1024 * 1024, 'File size ({{VALUE}}) is greater that the maximum allowed of 10MB'],
       required: [true, 'File Size is required'],
     },
     // folder: { type: Schema.Types.ObjectId, ref: 'Folder', required: [true, 'Folder is required'] },

@@ -52,8 +52,8 @@ class ApiFeatures {
     // console.log('KEY', this.queryObj.keyword)
 
     if (!this.queryObj.keyword) {
-      const page = this.queryObj.page * 1 || 1
-      const limit = this.queryObj.limit * 1 || 1000
+      const page = this.queryObj.page * 1 >= 1 ? this.queryObj.page * 1 : 1
+      const limit = this.queryObj.limit * 1 >= 1 ? this.queryObj.limit * 1 : 1000
       const skip = (page - 1) * limit
       this.query = this.query.skip(skip).limit(limit)
     }
