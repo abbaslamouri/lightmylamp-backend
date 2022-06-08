@@ -24,7 +24,7 @@ class ApiFeatures {
   }
 
   search() {
-    console.log('QQQQQ', this.DBModel.collection.collectionName)
+    // console.log('QQQQQ', this.DBModel.collection.collectionName)
     if (!this.queryObj.keyword) return this
     const regex = new RegExp(this.queryObj.keyword, 'i')
 
