@@ -50,6 +50,7 @@ const sendTokenResponse = async (res: Response, statusCode: number, user: IUser)
   user.password = undefined
   res.status(statusCode).json({
     status: 'success',
+    cookieExpires: process.env.JWT_COOKIE_EXPIRES_IN,
     auth,
   })
 }
@@ -148,7 +149,9 @@ const protect = asyncHandler(async (req: Request, res: Response, next: NextFunct
   // console.log('TOKEN', !token)
   if (!token) return next(new AppError('You are not allowed to access these resources, please login', 401))
   if (!process.env.JWT_SECRET) return next(new AppError('We are unable to process your credentials', 401))
+  console.log('HERE')
   const decoded: any = jwt.verify(token, process.env.JWT_SECRET)
+  console.log('decoded', decoded)
   const decodedUser = await User.findById(decoded.id)
   if (!decodedUser) return next(new AppError('We cannot find a user with this token in our database', 401))
   if (await decodedUser.hasPasswordChanged(decoded.iat))

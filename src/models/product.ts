@@ -57,7 +57,7 @@ interface IProduct {
   allowBackorders: string
   lowStockThreshold: number
   sortOrder: number
-  categories: [Types.ObjectId]
+  // categories: [Types.ObjectId]
   attributes: [IAttribute]
   variants: [Types.ObjectId]
   createdBy: Types.ObjectId
@@ -84,7 +84,6 @@ const schema = new Schema<IProduct>(
     },
     acsPartNumber: {
       type: String,
-      lowercase: true,
     },
     eligibilities: [{ type: Schema.Types.ObjectId, ref: 'Eligibility' }],
     nextHigherAssemblies: [{ type: Schema.Types.ObjectId, ref: 'Nexthigherassembly' }],
@@ -192,32 +191,32 @@ const schema = new Schema<IProduct>(
       type: Number,
       default: 0,
     },
-    categories: [
-      {
-        // type: mongoose.Schema.Types.ObjectId,
-        // ref: 'Category',
-        type: Schema.Types.ObjectId,
-        ref: Category,
-      },
-    ],
+    // categories: [
+    //   {
+    //     // type: mongoose.Schema.Types.ObjectId,
+    //     // ref: 'Category',
+    //     type: Schema.Types.ObjectId,
+    //     ref: Category,
+    //   },
+    // ],
     // attributes: Array,
-    attributes: [
-      {
-        // type: Schema.Types.ObjectId,
-        // ref: 'Attribute',
-        attribute: { type: Schema.Types.ObjectId, ref: 'Attribute' },
-        terms: [{ type: Schema.Types.ObjectId, ref: 'Attributeterm' }],
-        defaultTerm: { type: Schema.Types.ObjectId, ref: 'Attributeterm' },
-        enabled: {
-          type: Boolean,
-          default: false,
-        },
-        variation: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
+    // attributes: [
+    //   {
+    //     // type: Schema.Types.ObjectId,
+    //     // ref: 'Attribute',
+    //     attribute: { type: Schema.Types.ObjectId, ref: 'Attribute' },
+    //     terms: [{ type: Schema.Types.ObjectId, ref: 'Attributeterm' }],
+    //     defaultTerm: { type: Schema.Types.ObjectId, ref: 'Attributeterm' },
+    //     enabled: {
+    //       type: Boolean,
+    //       default: false,
+    //     },
+    //     variation: {
+    //       type: Boolean,
+    //       default: false,
+    //     },
+    //   },
+    // ],
     // variants: [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
     // soldQty: {
     //   type: Number,
@@ -265,11 +264,11 @@ const schema = new Schema<IProduct>(
   }
 )
 
-schema.virtual('variants', {
-  ref: 'Variant',
-  foreignField: 'product',
-  localField: '_id',
-})
+// schema.virtual('variants', {
+//   ref: 'Variant',
+//   foreignField: 'product',
+//   localField: '_id',
+// })
 
 // Document Middleware, runs only before save() and create()
 schema.pre('save', function (next) {
@@ -278,13 +277,12 @@ schema.pre('save', function (next) {
   next()
 })
 
-
 schema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'categories',
-    // model: 'Category',
-    // select: 'name slug permalink',
-  })
+  // this.populate({
+  //   path: 'categories',
+  //   // model: 'Category',
+  //   // select: 'name slug permalink',
+  // })
   this.populate({
     path: 'gallery',
     // model: 'Media',
@@ -295,11 +293,11 @@ schema.pre(/^find/, function (next) {
   //     model: 'Variant',
   //     select: '-createdAt',
   //   })
-  this.populate({
-    path: 'attributes',
-    // model: 'Attribute',
-    // select: '-createdAt',
-  })
+  // this.populate({
+  //   path: 'attributes',
+  //   // model: 'Attribute',
+  //   // select: '-createdAt',
+  // })
   this.populate({
     path: 'eligibilities',
     // model: 'Attribute',
@@ -310,21 +308,21 @@ schema.pre(/^find/, function (next) {
     // model: 'Attribute',
     // select: '-createdAt',
   })
-  this.populate({
-    path: 'attributes.attribute',
-    // model: 'Attribute',
-    // select: '-createdAt',
-  })
-  this.populate({
-    path: 'attributes.terms',
-    // model: 'Attributeterm',
-    // select: '-createdAt',
-  })
-  this.populate({
-    path: 'attributes.defaultTerm',
-    // model: 'Attributeterm',
-    // select: '-createdAt',
-  })
+  // this.populate({
+  //   path: 'attributes.attribute',
+  //   // model: 'Attribute',
+  //   // select: '-createdAt',
+  // })
+  // this.populate({
+  //   path: 'attributes.terms',
+  //   // model: 'Attributeterm',
+  //   // select: '-createdAt',
+  // })
+  // this.populate({
+  //   path: 'attributes.defaultTerm',
+  //   // model: 'Attributeterm',
+  //   // select: '-createdAt',
+  // })
   this.populate({
     path: 'oemPartNumber',
     // model: 'Attributeterm',
