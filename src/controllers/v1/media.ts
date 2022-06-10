@@ -35,7 +35,7 @@ const saveMedia = asyncHandler(async (req: Request, res: Response, next: NextFun
       const path = (req as any).files[prop].destination.split('/')
       uploadFiles[parseInt(prop)] = {
         ...(req as any).files[prop],
-        name: filename,
+        name: (req as any).files[prop].filename.split('.')[0],
         path: `${path[path.length - 1]}/${filename}`,
         originalName: (req as any).files[prop].originalname,
         // folder,

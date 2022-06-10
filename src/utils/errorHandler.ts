@@ -35,6 +35,8 @@ const sendError = (res: Response, returnError: ReturnError) => {
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   console.log(colors.red.bold(`ERROR, ${err}`))
+  // console.log(colors.red.bold(`ERROR Name, ${err.name}`))
+  // console.log(colors.red.bold(`ERROR Message, ${err.message}`))
 
   const returnError: ReturnError = {
     status: 'error',
@@ -72,6 +74,12 @@ const errorHandler = (err: any, req: Request, res: Response, next: NextFunction)
           }`,
         })
       }
+    } else if (err.name.includes('TokenExpiredError')) {
+      returnError.errors.push({
+        path: 'jwt',
+        value: err.name ? err.name : 'TokenExpiredError',
+        message: 'Your Token has expired, please login',
+      })
     } else {
       returnError.errors.push({
         path: err.name ? err.name : '',

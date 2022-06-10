@@ -21,7 +21,7 @@ import nexthigherassemblyRouter from './routes/v1/nexthigherassemblies'
 import attributeRouter from './routes/v1/attributes'
 import attributetermsRouter from './routes/v1/attributeterms'
 import productRouter from './routes/v1/products'
-import variantRouter from './routes/v1/variants'
+import galleryRouter from './routes/v1/galleries'
 import { IUser } from './models/user'
 dotenv.config()
 
@@ -92,7 +92,7 @@ app.use('/v1/nexthigherassemblies', nexthigherassemblyRouter)
 app.use('/v1/attributes', attributeRouter)
 app.use('/v1/attributeterms', attributetermsRouter)
 app.use('/v1/products', productRouter)
-app.use('/v1/variants', variantRouter)
+app.use('/v1/galleries', galleryRouter)
 // app.all('*', async (req: Request, res: Response, next) => {
 //   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 // })

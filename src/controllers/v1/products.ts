@@ -42,7 +42,7 @@ const createProducts = async (req: Request, data: any) => {
     product.gallery = []
     product.eligibilities = []
     product.nextHigherAssemblies = []
-    product.price = Math.round(product.price * 100)
+    product.price = product.price * 1
     product.tbq = data[prop].tbq ? true : false
     product.createdBy = (req as any).user.id
 

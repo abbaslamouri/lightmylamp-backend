@@ -32,7 +32,7 @@ const sendTokenResponse = async (res: Response, statusCode: number, user: IUser)
   let auth = null
   if (user) {
     token = await user.getSinedJwtToken()
-    auth = { token, user }
+    // auth = { token, user }
   }
   // res.cookie('auth', JSON.stringify(auth), {
   //   expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -51,7 +51,8 @@ const sendTokenResponse = async (res: Response, statusCode: number, user: IUser)
   res.status(statusCode).json({
     status: 'success',
     cookieExpires: process.env.JWT_COOKIE_EXPIRES_IN,
-    auth,
+    user,
+    token,
   })
 }
 
@@ -114,7 +115,7 @@ const completeSignup = asyncHandler(async (req: Request, res: Response, next: Ne
 })
 
 const signin = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  // console.log(req.body)
+  console.log(req.body)
   const { email, password } = req.body
   if (!email || !password) return next(new AppError('Email and Password are required', 401))
   const user = await User.findOne({ email }).select('+password')
@@ -125,7 +126,7 @@ const signin = asyncHandler(async (req: Request, res: Response, next: NextFuncti
 })
 
 const signout = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  // const auth = { token: ' ', user: {} }
+  console.log('PPPPP')
   res.cookie('jwt', '', {
     maxAge: 0,
   })

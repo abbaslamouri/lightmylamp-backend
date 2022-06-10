@@ -1,18 +1,17 @@
-import { Schema, model, Types } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import slugify from 'slugify'
-// import { Folder } from './folder'
 
 interface IMedia {
   name: string
   originalName: string
+  displayName: string
+  altText: string
+  caption: string
   slug: string
   sortOrder: Number
-  // permalink: string
   path: string
-  url: string
   mimetype: string
   size: Number
-  // folder: Types.ObjectId
 }
 
 const schema = new Schema<IMedia>(
@@ -24,23 +23,24 @@ const schema = new Schema<IMedia>(
       maxlength: [500, 'Name cannot be more than 100 characters long'],
       default: 'placeholder.png',
     },
-    originalName: {
-      type: String,
-    },
     slug: {
       type: String,
     },
-    sortOrder: {
-      type: Number,
-      default: 0,
+    originalName: {
+      type: String,
     },
-
+    displayName: {
+      type: String,
+    },
+    altText: {
+      type: String,
+    },
+    caption: {
+      type: String,
+    },
     path: {
       type: String,
       default: '/uploads/placeholder.png',
-    },
-    url: {
-      type: String,
     },
     mimetype: {
       type: String,
@@ -50,7 +50,10 @@ const schema = new Schema<IMedia>(
       max: [10 * 1024 * 1024, 'File size ({{VALUE}}) is greater that the maximum allowed of 10MB'],
       required: [true, 'File Size is required'],
     },
-    // folder: { type: Schema.Types.ObjectId, ref: 'Folder', required: [true, 'Folder is required'] },
+    sortOrder: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     // versionKey: false,
@@ -65,7 +68,6 @@ const schema = new Schema<IMedia>(
 // Document Middleware, runs only before save() and create()
 schema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true })
-  // this.permalink = this.permalink ? this.permalink : slugify(this.name, { lower: true })
   next()
 })
 
